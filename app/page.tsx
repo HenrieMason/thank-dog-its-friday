@@ -1,233 +1,112 @@
 export default function Home() {
   return (
     <main className="min-h-screen bg-[#fffaf3] text-[#1f2a24]">
-      {/* Navigation */}
-      <header className="mx-auto flex max-w-7xl items-center justify-between px-6 py-6">
-        <div className="text-xl font-black tracking-tight">
-          Thank Dog It&apos;s Friday
-        </div>
+      {/* Full-width Logo */}
+      <div className="w-full px-4 pt-6 sm:px-8 sm:pt-8">
+        <img
+          src="/thankdogitsfriday.png"
+          alt="Thank Dog It's Friday"
+          className="mx-auto h-auto w-full max-w-6xl object-contain"
+        />
+      </div>
 
-        <a
-          href="#booking"
-          className="rounded-full bg-[#315c47] px-5 py-3 text-sm font-bold text-white transition hover:bg-[#274b3a]"
-        >
-          Request a Booking
-        </a>
-      </header>
-
-      {/* Hero */}
-      <section className="mx-auto grid max-w-7xl items-center gap-12 px-6 pb-24 pt-16 md:grid-cols-2 md:pt-24">
-        <div>
-          <p className="mb-4 font-bold uppercase tracking-[0.2em] text-[#c9734b]">
-            Pet Sitting & Animal Care
-          </p>
-
-          <h1 className="max-w-3xl text-5xl font-black leading-[0.95] tracking-tight sm:text-6xl lg:text-7xl">
-            Your pets deserve a good Friday too.
+      <div className="mx-auto max-w-2xl px-5 pb-12 pt-8 sm:px-6 sm:pb-16 sm:pt-12">
+        {/* Title */}
+        <section className="text-center">
+          <h1 className="text-3xl font-black tracking-tight sm:text-5xl">
+            Medford/Grants Pass Dog Sitter
           </h1>
 
-          <p className="mt-7 max-w-xl text-lg leading-8 text-[#526158]">
-            Dependable, loving pet care while you&apos;re away. Personalized
-            attention, regular updates, and plenty of belly rubs included.
+          <p className="mx-auto mt-5 max-w-xl text-base leading-7 text-[#647067] sm:text-lg">
+            Looking for someone you can trust with your dog while you&apos;re
+            away? Tell me a little about you and your pup below.
+          </p>
+        </section>
+
+        {/* Questions */}
+        <form className="mt-12 grid gap-6 rounded-[2rem] border border-black/[0.06] bg-white p-6 shadow-sm sm:p-10">
+          <Input label="What is your name?" placeholder="Your name" />
+
+          <Input
+            label="What is your phone number?"
+            placeholder="(555) 555-5555"
+            type="tel"
+          />
+
+          <Input
+            label="What is your email?"
+            placeholder="you@example.com"
+            type="email"
+          />
+
+          <Input label="What is your dog's name?" placeholder="Dog's name" />
+
+          <Input
+            label="What breed is your dog?"
+            placeholder="Golden Retriever, Lab, etc."
+          />
+
+          <Input
+            label="How many dogs do you have?"
+            placeholder="1"
+            type="number"
+          />
+
+          <Input
+            label="What dates do you need a dog sitter?"
+            placeholder="September 12–15"
+          />
+
+          <label className="grid gap-2 text-[15px] font-bold sm:text-base">
+            Tell me about your dog.
+            <textarea
+              className="min-h-36 resize-y rounded-xl border border-black/10 bg-[#fffdf9] px-4 py-3 font-normal leading-6 outline-none transition focus:border-[#315c47] focus:ring-2 focus:ring-[#315c47]/10"
+              placeholder="Personality, feeding schedule, medications, walks, special instructions, etc."
+            />
+          </label>
+
+          <label className="grid gap-2 text-[15px] font-bold sm:text-base">
+            Is there anything else I should know?
+            <textarea
+              className="min-h-28 resize-y rounded-xl border border-black/10 bg-[#fffdf9] px-4 py-3 font-normal leading-6 outline-none transition focus:border-[#315c47] focus:ring-2 focus:ring-[#315c47]/10"
+              placeholder="Anything else you'd like to share..."
+            />
+          </label>
+
+          <button
+            type="submit"
+            className="mt-2 rounded-xl bg-[#315c47] px-8 py-4 text-lg font-bold text-white shadow-sm transition hover:bg-[#274b3a]"
+          >
+            Send Request
+          </button>
+        </form>
+
+        {/* Meet the Owner */}
+        <section className="mt-20 rounded-[2rem] bg-[#eef3ed] px-6 py-10 text-center sm:px-10 sm:py-12">
+          <h2 className="text-3xl font-black tracking-tight sm:text-4xl">
+            Meet the Owner
+          </h2>
+
+          <p className="mt-6 text-base leading-8 text-[#526158] sm:text-lg">
+            Hi, I&apos;m Ava! I&apos;m a local dog sitter serving the Medford
+            and Grants Pass area. I&apos;ve always loved animals and know how
+            important it is to have someone you trust taking care of your dog
+            while you&apos;re away.
           </p>
 
-          <div className="mt-8 flex flex-wrap gap-4">
-            <a
-              href="#booking"
-              className="rounded-full bg-[#315c47] px-7 py-4 font-bold text-white transition hover:bg-[#274b3a]"
-            >
-              Request Pet Sitting
-            </a>
+          <p className="mt-4 text-base leading-8 text-[#526158] sm:text-lg">
+            My goal is to make sure every dog feels safe, comfortable, and
+            loved. I&apos;ll treat your dog like one of my own and keep you
+            updated so you can relax knowing they&apos;re in good hands.
+          </p>
+        </section>
 
-            <a
-              href="#services"
-              className="rounded-full border-2 border-[#315c47] px-7 py-4 font-bold text-[#315c47] transition hover:bg-[#edf3ee]"
-            >
-              View Services
-            </a>
-          </div>
-        </div>
-
-        <div className="flex min-h-[420px] items-center justify-center rounded-[2.5rem] bg-[#efd9bf] p-10">
-          <div className="text-center">
-            <div className="text-8xl">🐶</div>
-            <p className="mt-6 text-xl font-bold">
-              Your sister&apos;s photo will go here
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Services */}
-      <section id="services" className="bg-white py-24">
-        <div className="mx-auto max-w-7xl px-6">
-          <div className="mx-auto mb-14 max-w-2xl text-center">
-            <p className="font-bold uppercase tracking-[0.2em] text-[#c9734b]">
-              Services
-            </p>
-
-            <h2 className="mt-3 text-4xl font-black tracking-tight sm:text-5xl">
-              Care for every kind of best friend.
-            </h2>
-          </div>
-
-          <div className="grid gap-6 md:grid-cols-3">
-            <ServiceCard
-              emoji="🐕"
-              title="Dog Sitting"
-              text="Personalized care, playtime, feeding, walks, and lots of attention."
-            />
-
-            <ServiceCard
-              emoji="🐈"
-              title="Cat Sitting"
-              text="Calm, reliable visits for feeding, litter care, play, and companionship."
-            />
-
-            <ServiceCard
-              emoji="🐾"
-              title="Other Animals"
-              text="Have another kind of pet? Reach out and tell us what care they need."
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* Why Us */}
-      <section className="py-24">
-        <div className="mx-auto max-w-7xl px-6">
-          <div className="grid gap-12 md:grid-cols-2">
-            <div>
-              <p className="font-bold uppercase tracking-[0.2em] text-[#c9734b]">
-                Why choose us?
-              </p>
-
-              <h2 className="mt-3 text-4xl font-black tracking-tight sm:text-5xl">
-                Pet care you can actually feel good about.
-              </h2>
-            </div>
-
-            <div className="grid gap-4">
-              <Benefit text="Personalized care for every pet" />
-              <Benefit text="Photo and text updates while you're away" />
-              <Benefit text="Reliable and responsive communication" />
-              <Benefit text="Meet-and-greet before your first booking" />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* About */}
-      <section className="bg-[#315c47] py-24 text-white">
-        <div className="mx-auto grid max-w-7xl gap-12 px-6 md:grid-cols-2">
-          <div className="min-h-[350px] rounded-[2rem] bg-white/10" />
-
-          <div className="flex flex-col justify-center">
-            <p className="font-bold uppercase tracking-[0.2em] text-[#f2bc8d]">
-              About
-            </p>
-
-            <h2 className="mt-3 text-4xl font-black tracking-tight sm:text-5xl">
-              Hi, I&apos;m your local pet sitter.
-            </h2>
-
-            <p className="mt-6 text-lg leading-8 text-white/80">
-              Add your sister&apos;s story here—why she loves animals, her
-              experience caring for pets, and why owners can trust her with
-              their furry family members.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Booking */}
-      <section id="booking" className="bg-white py-24">
-        <div className="mx-auto max-w-3xl px-6">
-          <div className="text-center">
-            <p className="font-bold uppercase tracking-[0.2em] text-[#c9734b]">
-              Get Started
-            </p>
-
-            <h2 className="mt-3 text-4xl font-black tracking-tight sm:text-5xl">
-              Request a booking.
-            </h2>
-
-            <p className="mt-4 text-[#647067]">
-              Tell us a little about your pets and the care you need.
-            </p>
-          </div>
-
-          <form className="mt-12 grid gap-5">
-            <div className="grid gap-5 sm:grid-cols-2">
-              <Input label="Your name" placeholder="Jane Smith" />
-              <Input label="Phone" placeholder="(555) 555-5555" />
-            </div>
-
-            <Input
-              label="Email"
-              placeholder="you@example.com"
-              type="email"
-            />
-
-            <div className="grid gap-5 sm:grid-cols-2">
-              <Input label="Pet type" placeholder="Dog, cat, etc." />
-              <Input label="Number of pets" placeholder="1" />
-            </div>
-
-            <Input label="Dates needed" placeholder="September 12–15" />
-
-            <label className="grid gap-2 font-semibold">
-              Tell us about your pets
-              <textarea
-                className="min-h-36 rounded-2xl border border-black/10 bg-[#fffaf3] px-4 py-3 font-normal outline-none transition focus:border-[#315c47]"
-                placeholder="Names, breeds, routines, medications, special instructions..."
-              />
-            </label>
-
-            <button
-              type="submit"
-              className="mt-2 rounded-full bg-[#315c47] px-8 py-4 text-lg font-bold text-white transition hover:bg-[#274b3a]"
-            >
-              Request Pet Sitting
-            </button>
-          </form>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="border-t border-black/10 bg-white px-6 py-10 text-center text-sm text-[#6b756e]">
-        © 2026 Thank Dog It&apos;s Friday
-      </footer>
-    </main>
-  );
-}
-
-function ServiceCard({
-  emoji,
-  title,
-  text,
-}: {
-  emoji: string;
-  title: string;
-  text: string;
-}) {
-  return (
-    <div className="rounded-[2rem] bg-[#fffaf3] p-8">
-      <div className="text-5xl">{emoji}</div>
-      <h3 className="mt-6 text-2xl font-black">{title}</h3>
-      <p className="mt-3 leading-7 text-[#637067]">{text}</p>
-    </div>
-  );
-}
-
-function Benefit({ text }: { text: string }) {
-  return (
-    <div className="flex items-center gap-4 rounded-2xl bg-white p-5">
-      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#315c47] font-bold text-white">
-        ✓
+        {/* Footer */}
+        <footer className="mt-16 border-t border-black/10 pt-8 text-center text-sm text-[#6b756e]">
+          © 2026 Thank Dog It&apos;s Friday
+        </footer>
       </div>
-      <span className="font-bold">{text}</span>
-    </div>
+    </main>
   );
 }
 
@@ -241,12 +120,12 @@ function Input({
   type?: string;
 }) {
   return (
-    <label className="grid gap-2 font-semibold">
+    <label className="grid gap-2 text-[15px] font-bold sm:text-base">
       {label}
       <input
         type={type}
         placeholder={placeholder}
-        className="rounded-2xl border border-black/10 bg-[#fffaf3] px-4 py-3 font-normal outline-none transition focus:border-[#315c47]"
+        className="rounded-xl border border-black/10 bg-[#fffdf9] px-4 py-3 font-normal outline-none transition focus:border-[#315c47] focus:ring-2 focus:ring-[#315c47]/10"
       />
     </label>
   );
