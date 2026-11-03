@@ -20,30 +20,41 @@ export default function Home() {
   ].join("-");
 
   return (
-    <main className="min-h-screen bg-[#128ced] text-white">
+    <main className="min-h-screen overflow-x-hidden bg-[#128ced] text-white">
       {/* Full-width Logo */}
       <div className="w-full px-4 pt-6 sm:px-8 sm:pt-8">
         <img
           src="/thankdogitsfriday.png"
           alt="Thank Dog It's Friday"
-          className="mx-auto h-auto w-full max-w-6xl object-contain"
+          className="mx-auto block h-auto w-full max-w-6xl object-contain"
         />
       </div>
 
-      <div className="mx-auto max-w-2xl px-5 pb-12 pt-8 sm:px-6 sm:pb-16 sm:pt-12">
-        {/* Title */}
-        <section className="text-center">
-          <h1 className="text-3xl font-black tracking-tight text-white sm:text-5xl">
-            Southern Oregon Pet Sitter
-          </h1>
+      {/* Subtitle Directly Below Logo */}
+      <div className="px-5 text-center">
+        <h1 className="text-base font-semibold text-white sm:text-lg">
+          Southern Oregon Pet Sitter
+        </h1>
+      </div>
 
-          <p className="mx-auto mt-5 max-w-xl text-base leading-7 text-white/90 sm:text-lg">
-            Rates: $35 per day. Visits twice a day.
+      <div className="mx-auto max-w-2xl px-5 pb-12 pt-6 sm:px-6 sm:pb-16">
+        {/* Rates Bubble */}
+        <section className="rounded-[2rem] border border-white/20 bg-white px-6 py-6 text-center text-[#1f2a24] shadow-xl">
+          <p className="text-3xl font-black text-[#128ced] sm:text-4xl">
+            $35
+          </p>
+
+          <p className="mt-1 text-base font-semibold">
+            per Day
+          </p>
+
+          <p className="mt-2 text-sm text-gray-500">
+            Two visits per day
           </p>
         </section>
 
-        {/* Questions */}
-        <form className="mt-12 grid gap-6 rounded-[2rem] border border-white/20 bg-white p-6 text-[#1f2a24] shadow-xl sm:p-10">
+        {/* Request Form */}
+        <form className="mt-6 grid min-w-0 gap-6 rounded-[2rem] border border-white/20 bg-white p-5 text-[#1f2a24] shadow-xl sm:p-10">
           <Input
             name="fullName"
             label="What is your full name?"
@@ -68,7 +79,7 @@ export default function Home() {
           />
 
           {/* Number of Pets */}
-          <label className="grid gap-2 text-[15px] font-bold sm:text-base">
+          <label className="grid min-w-0 gap-2 text-[15px] font-bold sm:text-base">
             How many pets do you have?
             <input
               name="petCount"
@@ -80,7 +91,7 @@ export default function Home() {
               onChange={(e) => setPetCount(e.target.value)}
               placeholder="Number of pets"
               required
-              className="w-full rounded-xl border border-black/10 bg-[#f5f9ff] px-4 py-3 font-normal text-[#1f2a24] outline-none transition placeholder:text-gray-400 focus:border-[#128ced] focus:ring-2 focus:ring-[#128ced]/20"
+              className="box-border w-full min-w-0 rounded-xl border border-black/10 bg-[#f5f9ff] px-4 py-3 font-normal text-[#1f2a24] outline-none transition placeholder:text-gray-400 focus:border-[#128ced] focus:ring-2 focus:ring-[#128ced]/20"
             />
           </label>
 
@@ -88,7 +99,7 @@ export default function Home() {
           {Array.from({ length: numberOfPets }, (_, index) => (
             <section
               key={index}
-              className="grid gap-5 rounded-2xl border border-[#128ced]/20 bg-[#f5f9ff] p-5 sm:p-6"
+              className="grid min-w-0 gap-5 rounded-2xl border border-[#128ced]/20 bg-[#f5f9ff] p-4 sm:p-6"
             >
               <h2 className="text-xl font-black text-[#128ced]">
                 Pet #{index + 1}
@@ -114,11 +125,11 @@ export default function Home() {
                 placeholder="None, or list any allergies"
               />
 
-              <label className="grid gap-2 text-[15px] font-bold sm:text-base">
+              <label className="grid min-w-0 gap-2 text-[15px] font-bold sm:text-base">
                 Personality?
                 <textarea
                   name={`pet${index + 1}Personality`}
-                  className="min-h-28 w-full resize-y rounded-xl border border-black/10 bg-white px-4 py-3 font-normal leading-6 text-[#1f2a24] outline-none transition placeholder:text-gray-400 focus:border-[#128ced] focus:ring-2 focus:ring-[#128ced]/20"
+                  className="box-border min-h-28 w-full min-w-0 resize-y rounded-xl border border-black/10 bg-white px-4 py-3 font-normal leading-6 text-[#1f2a24] outline-none transition placeholder:text-gray-400 focus:border-[#128ced] focus:ring-2 focus:ring-[#128ced]/20"
                   placeholder="Friendly, energetic, shy, playful, etc."
                 />
               </label>
@@ -126,13 +137,13 @@ export default function Home() {
           ))}
 
           {/* Sitting Dates */}
-          <section className="grid gap-4">
+          <section className="grid min-w-0 gap-4">
             <h2 className="text-[15px] font-bold sm:text-base">
               What dates do you need a sitter?
             </h2>
 
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <label className="grid gap-2 text-sm font-semibold">
+            <div className="grid min-w-0 grid-cols-1 gap-4 sm:grid-cols-2">
+              <label className="grid min-w-0 gap-2 text-sm font-semibold">
                 Start Date
                 <input
                   type="date"
@@ -141,11 +152,11 @@ export default function Home() {
                   value={startDate}
                   onChange={(e) => setStartDate(e.target.value)}
                   required
-                  className="w-full min-w-0 rounded-xl border border-black/10 bg-[#f5f9ff] px-4 py-3 font-normal text-[#1f2a24] outline-none transition focus:border-[#128ced] focus:ring-2 focus:ring-[#128ced]/20"
+                  className="block box-border w-full min-w-0 max-w-full rounded-xl border border-black/10 bg-[#f5f9ff] px-3 py-3 font-normal text-[#1f2a24] outline-none transition focus:border-[#128ced] focus:ring-2 focus:ring-[#128ced]/20"
                 />
               </label>
 
-              <label className="grid gap-2 text-sm font-semibold">
+              <label className="grid min-w-0 gap-2 text-sm font-semibold">
                 End Date
                 <input
                   type="date"
@@ -153,7 +164,7 @@ export default function Home() {
                   min={startDate || todayString}
                   key={startDate}
                   required
-                  className="w-full min-w-0 rounded-xl border border-black/10 bg-[#f5f9ff] px-4 py-3 font-normal text-[#1f2a24] outline-none transition focus:border-[#128ced] focus:ring-2 focus:ring-[#128ced]/20"
+                  className="block box-border w-full min-w-0 max-w-full rounded-xl border border-black/10 bg-[#f5f9ff] px-3 py-3 font-normal text-[#1f2a24] outline-none transition focus:border-[#128ced] focus:ring-2 focus:ring-[#128ced]/20"
                 />
               </label>
             </div>
@@ -168,15 +179,16 @@ export default function Home() {
           />
 
           {/* Additional Information */}
-          <label className="grid gap-2 text-[15px] font-bold sm:text-base">
+          <label className="grid min-w-0 gap-2 text-[15px] font-bold sm:text-base">
             Is there anything else I should know?
             <textarea
               name="additionalInfo"
-              className="min-h-28 w-full resize-y rounded-xl border border-black/10 bg-[#f5f9ff] px-4 py-3 font-normal leading-6 text-[#1f2a24] outline-none transition placeholder:text-gray-400 focus:border-[#128ced] focus:ring-2 focus:ring-[#128ced]/20"
+              className="box-border min-h-28 w-full min-w-0 resize-y rounded-xl border border-black/10 bg-[#f5f9ff] px-4 py-3 font-normal leading-6 text-[#1f2a24] outline-none transition placeholder:text-gray-400 focus:border-[#128ced] focus:ring-2 focus:ring-[#128ced]/20"
               placeholder="Feeding schedules, medications, special instructions, or anything else you'd like to share..."
             />
           </label>
 
+          {/* Submit Button */}
           <button
             type="submit"
             className="mt-2 rounded-xl bg-[#128ced] px-8 py-4 text-lg font-bold text-white shadow-sm transition hover:bg-[#0875cc]"
@@ -228,14 +240,14 @@ function Input({
   required?: boolean;
 }) {
   return (
-    <label className="grid gap-2 text-[15px] font-bold text-[#1f2a24] sm:text-base">
+    <label className="grid min-w-0 gap-2 text-[15px] font-bold text-[#1f2a24] sm:text-base">
       {label}
       <input
         name={name}
         type={type}
         placeholder={placeholder}
         required={required}
-        className="w-full rounded-xl border border-black/10 bg-[#f5f9ff] px-4 py-3 font-normal text-[#1f2a24] outline-none transition placeholder:text-gray-400 focus:border-[#128ced] focus:ring-2 focus:ring-[#128ced]/20"
+        className="box-border w-full min-w-0 max-w-full rounded-xl border border-black/10 bg-[#f5f9ff] px-4 py-3 font-normal text-[#1f2a24] outline-none transition placeholder:text-gray-400 focus:border-[#128ced] focus:ring-2 focus:ring-[#128ced]/20"
       />
     </label>
   );
