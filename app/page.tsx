@@ -261,7 +261,7 @@ export default function Home() {
         </section>
 
         {/* Footer */}
-        <footer className="mt-16 border-t border-white/25 pt-8 text-center text-sm text-white/80">
+        <footer className="mt-6 border-t border-white/25 pt-8 text-center text-sm text-white/80">
           © 2026 Thank Dog It&apos;s Friday
         </footer>
       </div>
