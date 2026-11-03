@@ -3,16 +3,64 @@
 
 import { useState } from "react";
 
+type PetDetails = {
+  allergies: string;
+  medications: string;
+};
+
 export default function Home() {
   const [petCount, setPetCount] = useState(0);
   const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+
+  const [petDetails, setPetDetails] = useState<PetDetails[]>(
+    Array.from({ length: 5 }, () => ({
+      allergies: "",
+      medications: "",
+    }))
+  );
+
+  const updatePet = (
+    index: number,
+    field: keyof PetDetails,
+    value: string
+  ) => {
+    setPetDetails((previous) =>
+      previous.map((pet, i) =>
+        i === index ? { ...pet, [field]: value } : pet
+      )
+    );
+  };
 
   const today = new Date();
+
   const todayString = [
     today.getFullYear(),
     String(today.getMonth() + 1).padStart(2, "0"),
     String(today.getDate()).padStart(2, "0"),
   ].join("-");
+
+  // Calculate days, including start and end dates
+  const calculateDays = () => {
+    if (!startDate || !endDate) return 0;
+
+    const start = new Date(`${startDate}T00:00:00Z`);
+    const end = new Date(`${endDate}T00:00:00Z`);
+
+    const difference =
+      (end.getTime() - start.getTime()) / 86400000;
+
+    return Math.max(0, Math.round(difference) + 1);
+  };
+
+  const totalDays = calculateDays();
+
+  // $35 per day includes first pet
+  // Each additional pet costs $10 per day
+  const dailyRate =
+    petCount > 0 ? 35 + (petCount - 1) * 10 : 0;
+
+  const total = dailyRate * totalDays;
 
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#128ced] text-white">
@@ -25,7 +73,7 @@ export default function Home() {
         />
       </div>
 
-      {/* Subtitle Directly Below Logo */}
+      {/* Subtitle */}
       <div className="px-5 text-center">
         <h1 className="text-base font-semibold text-white sm:text-lg">
           Southern Oregon Pet Sitter
@@ -89,7 +137,7 @@ export default function Home() {
             required
           />
 
-          {/* Pet Count Selection */}
+          {/* Number of Pets */}
           <fieldset className="grid min-w-0 gap-3">
             <legend className="mb-3 text-[15px] font-bold sm:text-base">
               How many pets do you have?
@@ -144,12 +192,51 @@ export default function Home() {
                 required
               />
 
-              <Input
+              {/* Allergies */}
+              <YesNoQuestion
                 name={`pet${index + 1}Allergies`}
-                label="Allergies?"
-                placeholder="None, or list any allergies"
+                label="Does your pet have any allergies?"
+                value={petDetails[index].allergies}
+                onChange={(value) =>
+                  updatePet(index, "allergies", value)
+                }
               />
 
+              {petDetails[index].allergies === "yes" && (
+                <label className="grid min-w-0 gap-2 text-[15px] font-bold sm:text-base">
+                  What allergies does your pet have?
+                  <textarea
+                    name={`pet${index + 1}AllergyDetails`}
+                    required
+                    className="min-h-24 w-full min-w-0 resize-y rounded-xl border border-black/10 bg-white px-4 py-3 font-normal text-[#1f2a24] outline-none focus:border-[#128ced] focus:ring-2 focus:ring-[#128ced]/20"
+                    placeholder="List allergies and any special precautions..."
+                  />
+                </label>
+              )}
+
+              {/* Medications */}
+              <YesNoQuestion
+                name={`pet${index + 1}Medications`}
+                label="Does your pet take any medications?"
+                value={petDetails[index].medications}
+                onChange={(value) =>
+                  updatePet(index, "medications", value)
+                }
+              />
+
+              {petDetails[index].medications === "yes" && (
+                <label className="grid min-w-0 gap-2 text-[15px] font-bold sm:text-base">
+                  What medications does your pet take?
+                  <textarea
+                    name={`pet${index + 1}MedicationDetails`}
+                    required
+                    className="min-h-24 w-full min-w-0 resize-y rounded-xl border border-black/10 bg-white px-4 py-3 font-normal text-[#1f2a24] outline-none focus:border-[#128ced] focus:ring-2 focus:ring-[#128ced]/20"
+                    placeholder="Medication names, dosage, schedule, and instructions..."
+                  />
+                </label>
+              )}
+
+              {/* Personality */}
               <label className="grid min-w-0 gap-2 text-[15px] font-bold sm:text-base">
                 Personality?
                 <textarea
@@ -160,7 +247,7 @@ export default function Home() {
               </label>
             </section>
           ))}
-          
+
           {/* Sitting Dates */}
           <section className="w-full min-w-0 max-w-full overflow-hidden">
             <h2 className="mb-4 text-[15px] font-bold sm:text-base">
@@ -177,7 +264,14 @@ export default function Home() {
                     name="startDate"
                     min={todayString}
                     value={startDate}
-                    onChange={(e) => setStartDate(e.target.value)}
+                    onChange={(e) => {
+                      const newStart = e.target.value;
+                      setStartDate(newStart);
+
+                      if (endDate && endDate < newStart) {
+                        setEndDate("");
+                      }
+                    }}
                     required
                     style={{
                       width: "100%",
@@ -198,7 +292,8 @@ export default function Home() {
                     type="date"
                     name="endDate"
                     min={startDate || todayString}
-                    key={startDate}
+                    value={endDate}
+                    onChange={(e) => setEndDate(e.target.value)}
                     required
                     style={{
                       width: "100%",
@@ -227,9 +322,34 @@ export default function Home() {
             <textarea
               name="additionalInfo"
               className="box-border min-h-28 w-full min-w-0 resize-y rounded-xl border border-black/10 bg-[#f5f9ff] px-4 py-3 font-normal leading-6 text-[#1f2a24] outline-none transition placeholder:text-gray-400 focus:border-[#128ced] focus:ring-2 focus:ring-[#128ced]/20"
-              placeholder="Feeding schedules, medications, special instructions, or anything else you'd like to share..."
+              placeholder="Feeding schedules, special instructions, or anything else you'd like to share..."
             />
           </label>
+
+          {/* Total Calculator */}
+          <section className="rounded-2xl border border-[#128ced]/20 bg-[#f5f9ff] p-5">
+            <div className="flex items-center justify-between gap-3">
+              <span className="text-xl font-black">
+                Total:
+              </span>
+
+              <span className="text-3xl font-black text-[#128ced]">
+                ${total.toLocaleString("en-US")}
+              </span>
+            </div>
+
+            {petCount > 0 && totalDays > 0 ? (
+              <p className="mt-2 text-sm text-gray-500">
+                {totalDays} {totalDays === 1 ? "day" : "days"} ×
+                {" "}${dailyRate} per day
+                {" "}({petCount} {petCount === 1 ? "pet" : "pets"})
+              </p>
+            ) : (
+              <p className="mt-2 text-sm text-gray-500">
+                Select your number of pets and sitting dates to calculate the total.
+              </p>
+            )}
+          </section>
 
           {/* Submit Button */}
           <button
@@ -269,6 +389,7 @@ export default function Home() {
   );
 }
 
+// Reusable Input
 function Input({
   name,
   label,
@@ -293,5 +414,50 @@ function Input({
         className="box-border w-full min-w-0 max-w-full rounded-xl border border-black/10 bg-[#f5f9ff] px-4 py-3 font-normal text-[#1f2a24] outline-none transition placeholder:text-gray-400 focus:border-[#128ced] focus:ring-2 focus:ring-[#128ced]/20"
       />
     </label>
+  );
+}
+
+// Reusable Yes/No Buttons
+function YesNoQuestion({
+  name,
+  label,
+  value,
+  onChange,
+}: {
+  name: string;
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+}) {
+  return (
+    <fieldset className="grid min-w-0 gap-3">
+      <legend className="mb-3 text-[15px] font-bold sm:text-base">
+        {label}
+      </legend>
+
+      <div className="grid grid-cols-2 gap-3">
+        {["yes", "no"].map((option) => (
+          <label
+            key={option}
+            className={`flex cursor-pointer items-center justify-center rounded-xl border-2 px-4 py-3 text-base font-bold transition ${
+              value === option
+                ? "border-[#128ced] bg-[#128ced] text-white shadow-md"
+                : "border-[#128ced]/20 bg-white text-[#128ced] hover:border-[#128ced]"
+            }`}
+          >
+            <input
+              type="radio"
+              name={name}
+              value={option}
+              checked={value === option}
+              onChange={() => onChange(option)}
+              required
+              className="sr-only"
+            />
+            {option === "yes" ? "Yes" : "No"}
+          </label>
+        ))}
+      </div>
+    </fieldset>
   );
 }
