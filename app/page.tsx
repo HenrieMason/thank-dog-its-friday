@@ -213,27 +213,27 @@ export default function Home() {
 
             <div className="grid grid-cols-5 gap-2 sm:gap-3">
               {[1, 2, 3, 4, 5].map((count) => (
-                <label
+                <button
                   key={count}
-                  className={`flex aspect-square cursor-pointer items-center justify-center rounded-xl border-2 text-lg font-black transition ${
+                  type="button"
+                  aria-pressed={petCount === count}
+                  onClick={() => setPetCount(count)}
+                  className={`flex aspect-square w-full cursor-pointer touch-manipulation items-center justify-center rounded-xl border-2 text-lg font-black transition ${
                     petCount === count
                       ? "border-[#128ced] bg-[#128ced] text-white shadow-md"
                       : "border-[#128ced]/20 bg-[#f5f9ff] text-[#128ced] hover:border-[#128ced]"
                   }`}
                 >
-                  <input
-                    type="radio"
-                    name="petCount"
-                    value={count}
-                    checked={petCount === count}
-                    onChange={() => setPetCount(count)}
-                    required
-                    className="sr-only"
-                  />
                   {count}
-                </label>
+                </button>
               ))}
             </div>
+
+            <input
+              type="hidden"
+              name="petCount"
+              value={petCount || ""}
+            />
           </fieldset>
 
           {/* Dynamic Pet Questions */}
