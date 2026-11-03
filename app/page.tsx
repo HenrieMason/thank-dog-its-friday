@@ -217,7 +217,11 @@ export default function Home() {
                   key={count}
                   type="button"
                   aria-pressed={petCount === count}
-                  onClick={() => setPetCount(count)}
+                  onMouseDown={(e) => e.preventDefault()}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setPetCount(count);
+                  }}
                   className={`flex aspect-square w-full cursor-pointer touch-manipulation items-center justify-center rounded-xl border-2 text-lg font-black transition ${
                     petCount === count
                       ? "border-[#128ced] bg-[#128ced] text-white shadow-md"
@@ -228,8 +232,7 @@ export default function Home() {
                 </button>
               ))}
             </div>
-
-            <input
+                        <input
               type="hidden"
               name="petCount"
               value={petCount || ""}
