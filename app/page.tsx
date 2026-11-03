@@ -12,6 +12,7 @@ export default function Home() {
   const [petCount, setPetCount] = useState(0);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [phone, setPhone] = useState("");
 
   const [petDetails, setPetDetails] = useState<PetDetails[]>(
     Array.from({ length: 5 }, () => ({
@@ -30,6 +31,20 @@ export default function Home() {
         i === index ? { ...pet, [field]: value } : pet
       )
     );
+  };
+
+  // Automatically format phone number: (555) 555-5555
+  const formatPhoneNumber = (value: string) => {
+    const digits = value.replace(/\D/g, "").slice(0, 10);
+
+    if (digits.length === 0) return "";
+    if (digits.length < 4) return `(${digits}`;
+
+    if (digits.length < 7) {
+      return `(${digits.slice(0, 3)}) ${digits.slice(3)}`;
+    }
+
+    return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
   };
 
   const today = new Date();
@@ -121,13 +136,25 @@ export default function Home() {
             required
           />
 
-          <Input
-            name="phone"
-            label="What is your phone number?"
-            placeholder="5555555555"
-            type="tel"
-            required
-          />
+          {/* Automatically Formatted Phone Number */}
+          <label className="grid min-w-0 gap-2 text-[15px] font-bold text-[#1f2a24] sm:text-base">
+            What is your phone number?
+            <input
+              name="phone"
+              type="tel"
+              inputMode="numeric"
+              autoComplete="tel-national"
+              placeholder="(555) 555-5555"
+              value={phone}
+              onChange={(e) => {
+                setPhone(formatPhoneNumber(e.target.value));
+              }}
+              required
+              pattern="\([0-9]{3}\) [0-9]{3}-[0-9]{4}"
+              maxLength={14}
+              className="box-border w-full min-w-0 max-w-full rounded-xl border border-black/10 bg-[#f5f9ff] px-4 py-3 font-normal text-[#1f2a24] outline-none transition placeholder:text-gray-400 focus:border-[#128ced] focus:ring-2 focus:ring-[#128ced]/20"
+            />
+          </label>
 
           <Input
             name="email"
