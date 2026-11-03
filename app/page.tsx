@@ -128,7 +128,7 @@ export default function Home() {
           </div>
 
           <p className="mt-5 text-center text-sm text-gray-500">
-            Morning and evening visits, 30 minutes each
+            Two visits per day, 30 minutes each
           </p>
           <p className="mt-2 text-center text-sm text-gray-500">
             Example: 2 full days, 2 pets = $100
