@@ -106,10 +106,10 @@ export default function Home() {
           <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-3 sm:gap-6">
             <div className="text-center">
               <p className="text-2xl font-black text-[#128ced] sm:text-4xl">
-                $40
+                $20
               </p>
               <p className="mt-1 text-sm font-semibold sm:text-base">
-                per Day
+                per Visit
               </p>
             </div>
 
