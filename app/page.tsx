@@ -88,23 +88,24 @@ export default function Home() {
         />
       </div>
 
-      {/* Subtitle and Service Area */}
-      <div className="flex flex-col items-center px-5 text-center">
+      {/* Subtitle */}
+      <div className="px-5 text-center">
         <h1 className="text-base font-semibold text-white sm:text-lg">
           Southern Oregon Pet Sitter
         </h1>
-
-        {/* Service Area Bubble */}
-        <div className="mt-3 max-w-full rounded-full bg-white px-4 py-2 shadow-sm">
-          <p className="text-center text-[11px] font-medium leading-5 text-[#128ced] sm:text-xs">
-            Grants Pass, Central Point, Medford, White City, Eagle Point
-          </p>
-        </div>
       </div>
 
       <div className="mx-auto max-w-2xl px-5 pb-12 pt-6 sm:px-6 sm:pb-16">
+
+        {/* Full-width Service Area Bubble */}
+        <section className="w-full rounded-[2rem] border border-white/20 bg-white px-4 py-3 text-center text-[#128ced] shadow-xl sm:px-10">
+          <p className="text-[11px] font-medium leading-5 sm:text-xs">
+            Grants Pass, Central Point, Medford, White City, Eagle Point
+          </p>
+        </section>
+
         {/* Pricing Bubble */}
-        <section className="rounded-[2rem] border border-white/20 bg-white px-4 py-7 text-[#1f2a24] shadow-xl sm:px-10">
+        <section className="mt-6 rounded-[2rem] border border-white/20 bg-white px-4 py-7 text-[#1f2a24] shadow-xl sm:px-10">
           <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-3 sm:gap-6">
             <div className="text-center">
               <p className="text-2xl font-black text-[#128ced] sm:text-4xl">
@@ -342,13 +343,38 @@ export default function Home() {
             </div>
           </section>
 
-          {/* Address */}
+          {/* Street Address */}
           <Input
-            name="address"
-            label="What is your address?"
-            placeholder="Street address, city, ZIP code"
+            name="streetAddress"
+            label="What is your street address?"
+            placeholder="123 Main Street"
             required
           />
+
+          {/* City */}
+          <Input
+            name="city"
+            label="What city do you live in?"
+            placeholder="Medford"
+            required
+          />
+
+          {/* ZIP Code */}
+          <label className="grid min-w-0 gap-2 text-[15px] font-bold text-[#1f2a24] sm:text-base">
+            What is your ZIP code?
+            <input
+              name="zipCode"
+              type="text"
+              inputMode="numeric"
+              autoComplete="postal-code"
+              placeholder="97501"
+              maxLength={5}
+              pattern="[0-9]{5}"
+              title="Please enter a 5-digit ZIP code"
+              required
+              className="box-border w-full min-w-0 max-w-full rounded-xl border border-black/10 bg-[#f5f9ff] px-4 py-3 font-normal text-[#1f2a24] outline-none transition placeholder:text-gray-400 focus:border-[#128ced] focus:ring-2 focus:ring-[#128ced]/20"
+            />
+          </label>
 
           {/* Additional Information */}
           <label className="grid min-w-0 gap-2 text-[15px] font-bold sm:text-base">
