@@ -70,10 +70,10 @@ export default function Home() {
 
   const totalDays = calculateDays();
 
-  // $35 per day includes first pet
+  // $40 per day includes first pet
   // Each additional pet costs $10 per day
   const dailyRate =
-    petCount > 0 ? 35 + (petCount - 1) * 10 : 0;
+    petCount > 0 ? 40 + (petCount - 1) * 10 : 0;
 
   const total = dailyRate * totalDays;
 
@@ -109,7 +109,7 @@ export default function Home() {
           <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-3 sm:gap-6">
             <div className="text-center">
               <p className="text-2xl font-black text-[#128ced] sm:text-4xl">
-                $35
+                $40
               </p>
               <p className="mt-1 text-sm font-semibold sm:text-base">
                 per Day
@@ -171,6 +171,39 @@ export default function Home() {
             type="email"
             required
           />
+
+          {/* Street Address */}
+          <Input
+            name="streetAddress"
+            label="What is your street address?"
+            placeholder="123 Main Street"
+            required
+          />
+
+          {/* City */}
+          <Input
+            name="city"
+            label="What city do you live in?"
+            placeholder="Medford"
+            required
+          />
+
+          {/* ZIP Code */}
+          <label className="grid min-w-0 gap-2 text-[15px] font-bold text-[#1f2a24] sm:text-base">
+            What is your ZIP code?
+            <input
+              name="zipCode"
+              type="text"
+              inputMode="numeric"
+              autoComplete="postal-code"
+              placeholder="97501"
+              maxLength={5}
+              pattern="[0-9]{5}"
+              title="Please enter a 5-digit ZIP code"
+              required
+              className="box-border w-full min-w-0 max-w-full rounded-xl border border-black/10 bg-[#f5f9ff] px-4 py-3 font-normal text-[#1f2a24] outline-none transition placeholder:text-gray-400 focus:border-[#128ced] focus:ring-2 focus:ring-[#128ced]/20"
+            />
+          </label>
 
           {/* Number of Pets */}
           <fieldset className="grid min-w-0 gap-3">
@@ -342,39 +375,6 @@ export default function Home() {
               </label>
             </div>
           </section>
-
-          {/* Street Address */}
-          <Input
-            name="streetAddress"
-            label="What is your street address?"
-            placeholder="123 Main Street"
-            required
-          />
-
-          {/* City */}
-          <Input
-            name="city"
-            label="What city do you live in?"
-            placeholder="Medford"
-            required
-          />
-
-          {/* ZIP Code */}
-          <label className="grid min-w-0 gap-2 text-[15px] font-bold text-[#1f2a24] sm:text-base">
-            What is your ZIP code?
-            <input
-              name="zipCode"
-              type="text"
-              inputMode="numeric"
-              autoComplete="postal-code"
-              placeholder="97501"
-              maxLength={5}
-              pattern="[0-9]{5}"
-              title="Please enter a 5-digit ZIP code"
-              required
-              className="box-border w-full min-w-0 max-w-full rounded-xl border border-black/10 bg-[#f5f9ff] px-4 py-3 font-normal text-[#1f2a24] outline-none transition placeholder:text-gray-400 focus:border-[#128ced] focus:ring-2 focus:ring-[#128ced]/20"
-            />
-          </label>
 
           {/* Additional Information */}
           <label className="grid min-w-0 gap-2 text-[15px] font-bold sm:text-base">
