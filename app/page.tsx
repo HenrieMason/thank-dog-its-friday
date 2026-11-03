@@ -54,13 +54,13 @@ export default function Home() {
                 $10
               </p>
               <p className="mt-1 text-sm font-semibold sm:text-base">
-                per Pet
+                per additional Pet
               </p>
             </div>
           </div>
 
           <p className="mt-5 text-center text-sm text-gray-500">
-            Two visits per day
+            Two visits per day, 30 minutes each
           </p>
         </section>
 
