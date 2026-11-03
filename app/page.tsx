@@ -105,7 +105,7 @@ export default function Home() {
         </div>
 
         {/* Pricing Bubble */}
-        <section className="mt-10 rounded-[2rem] border border-white/20 bg-white px-4 py-7 text-[#1f2a24] shadow-xl sm:px-10">
+        <section className="mt-5 rounded-[2rem] border border-white/20 bg-white px-4 py-7 text-[#1f2a24] shadow-xl sm:px-10">
           <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-3 sm:gap-6">
             <div className="text-center">
               <p className="text-2xl font-black text-[#128ced] sm:text-4xl">
