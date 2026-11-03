@@ -119,7 +119,7 @@ export default function Home() {
 
             <div className="text-center">
               <p className="text-2xl font-black text-[#128ced] sm:text-4xl">
-                $10
+                $5
               </p>
               <p className="mt-1 text-sm font-semibold sm:text-base">
                 per additional Pet
