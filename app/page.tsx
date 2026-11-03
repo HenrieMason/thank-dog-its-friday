@@ -1,6 +1,6 @@
 export default function Home() {
   return (
-    <main className="min-h-screen bg-[#fffaf3] text-[#1f2a24]">
+    <main className="min-h-screen bg-[#128ced] text-[#1f2a24]">
       {/* Full-width Logo */}
       <div className="w-full px-4 pt-6 sm:px-8 sm:pt-8">
         <img
