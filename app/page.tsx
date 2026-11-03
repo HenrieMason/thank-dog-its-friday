@@ -95,17 +95,17 @@ export default function Home() {
         </h1>
       </div>
 
-      <div className="mx-auto max-w-2xl px-5 pb-12 pt-0 sm:px-6 sm:pb-16">
+      <div className="mx-auto max-w-2xl px-5 pb-12 pt-6 sm:px-6 sm:pb-16">
 
-        {/* Service Area — text directly on blue background */}
-        <div className="w-full px-4 text-center">
-          <p className="text-[11px] font-medium leading-5 text-white sm:text-xs">
-            Grants Pass • Central Point • Medford • White City • Eagle Point
-          </p>
-        </div>
+      {/* Service Area Bubble */}
+      <section className="w-full rounded-[2rem] border border-white/20 bg-white px-4 py-3 text-center text-[#128ced] shadow-xl sm:px-10">
+        <p className="text-[11px] font-medium leading-5 sm:text-xs">
+          Grants Pass • Central Point • Medford • White City • Eagle Point
+        </p>
+      </section>
 
         {/* Pricing Bubble */}
-        <section className="mt-5 rounded-[2rem] border border-white/20 bg-white px-4 py-7 text-[#1f2a24] shadow-xl sm:px-10">
+        <section className="mt-6 rounded-[2rem] border border-white/20 bg-white px-4 py-7 text-[#1f2a24] shadow-xl sm:px-10">
           <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-3 sm:gap-6">
             <div className="text-center">
               <p className="text-2xl font-black text-[#128ced] sm:text-4xl">
