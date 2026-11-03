@@ -352,15 +352,17 @@ export default function Home() {
           </section>
 
           {/* Booking Information */}
-          <div className="space-y-2 text-center text-sm text-gray-500">
-            <p>
-              We will review your request, then charge the full amount
-              before your scheduled service.
-            </p>
+          <div className="rounded-2xl border border-[#128ced]/20 bg-[#f5f9ff] p-5 text-center">
+            <div className="space-y-3 text-sm leading-6 text-gray-600">
+              <p>
+                We will review your request, then charge the full amount
+                before your scheduled service.
+              </p>
 
-            <p>
-              Please provide all food and medications for your pets.
-            </p>
+              <p>
+                Please provide all food and medications for your pets.
+              </p>
+            </div>
           </div>
 
           {/* Submit Button */}
