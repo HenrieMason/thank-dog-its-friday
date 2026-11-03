@@ -76,7 +76,7 @@ export default function Home() {
           <Input
             name="phone"
             label="What is your phone number?"
-            placeholder="(555) 555-5555"
+            placeholder="5555555555"
             type="tel"
             required
           />
