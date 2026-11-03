@@ -12,6 +12,8 @@ export default function Home() {
   const [petCount, setPetCount] = useState(0);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [startPeriod, setStartPeriod] = useState<"morning" | "evening">("morning");
+  const [endPeriod, setEndPeriod] = useState<"morning" | "evening">("evening");
   const [phone, setPhone] = useState("");
 
   const [petDetails, setPetDetails] = useState<PetDetails[]>(
@@ -55,27 +57,22 @@ export default function Home() {
     String(today.getDate()).padStart(2, "0"),
   ].join("-");
 
-  // Calculate days, including start and end dates
-  const calculateDays = () => {
-    if (!startDate || !endDate) return 0;
-
-    const start = new Date(`${startDate}T00:00:00Z`);
-    const end = new Date(`${endDate}T00:00:00Z`);
-
-    const difference =
-      (end.getTime() - start.getTime()) / 86400000;
-
-    return Math.max(0, Math.round(difference) + 1);
+  // Count the morning/evening visits requested, including both endpoints.
+  const calculateVisits = () => {
+    if (!startDate || !endDate || endDate < startDate) return 0;
+    const start = new Date(`${startDate}T00:00:00Z`).getTime();
+    const end = new Date(`${endDate}T00:00:00Z`).getTime();
+    const dayDifference = Math.round((end - start) / 86400000);
+    const visits = dayDifference * 2 +
+      (endPeriod === "evening" ? 1 : 0) -
+      (startPeriod === "evening" ? 1 : 0) + 1;
+    return Math.max(0, visits);
   };
 
-  const totalDays = calculateDays();
-
-  // $40 per day includes first pet
-  // Each additional pet costs $10 per day
-  const dailyRate =
-    petCount > 0 ? 40 + (petCount - 1) * 10 : 0;
-
-  const total = dailyRate * totalDays;
+  const totalVisits = calculateVisits();
+  // Two visits cost $40 for the first pet, plus $10 per additional pet.
+  const visitRate = petCount > 0 ? 20 + (petCount - 1) * 5 : 0;
+  const total = visitRate * totalVisits;
 
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#128ced] text-white">
@@ -131,7 +128,7 @@ export default function Home() {
           </div>
 
           <p className="mt-5 text-center text-sm text-gray-500">
-            Two visits per day, 30 minutes each
+            Morning and evening visits, 30 minutes each
           </p>
         </section>
 
@@ -319,63 +316,70 @@ export default function Home() {
             </section>
           ))}
 
-          {/* Sitting Dates */}
-          <section className="w-full min-w-0 max-w-full overflow-hidden">
+          {/* Sitting Dates and Visit Times */}
+          <section className="w-full min-w-0 max-w-full">
             <h2 className="mb-4 text-[15px] font-bold sm:text-base">
-              What dates do you need a sitter?
+              When do you need a sitter?
             </h2>
-
-            <div className="flex w-full min-w-0 flex-col gap-4">
-              {/* Start Date */}
-              <label className="flex w-full min-w-0 flex-col gap-2 text-sm font-semibold">
-                Start Date
-                <div className="w-full min-w-0 overflow-hidden rounded-xl border border-black/10 bg-[#f5f9ff]">
-                  <input
-                    type="date"
-                    name="startDate"
-                    min={todayString}
-                    value={startDate}
-                    onChange={(e) => {
-                      const newStart = e.target.value;
-                      setStartDate(newStart);
-
-                      if (endDate && endDate < newStart) {
-                        setEndDate("");
-                      }
-                    }}
-                    required
-                    style={{
-                      width: "100%",
-                      minWidth: 0,
-                      maxWidth: "100%",
-                      boxSizing: "border-box",
-                    }}
-                    className="block appearance-none border-0 bg-transparent px-3 py-3 font-normal text-[#1f2a24] outline-none focus:ring-2 focus:ring-inset focus:ring-[#128ced]/20"
-                  />
+            <div className="flex w-full min-w-0 flex-col gap-5">
+              <div className="grid min-w-0 gap-3">
+                <label htmlFor="startDate" className="text-sm font-semibold">Starting</label>
+                <input
+                  id="startDate"
+                  type="date"
+                  name="startDate"
+                  min={todayString}
+                  value={startDate}
+                  onChange={(e) => {
+                    const next = e.target.value;
+                    setStartDate(next);
+                    if (endDate && endDate < next) setEndDate("");
+                  }}
+                  required
+                  className="block box-border w-full min-w-0 rounded-xl border border-black/10 bg-[#f5f9ff] px-3 py-3 font-normal text-[#1f2a24] outline-none focus:ring-2 focus:ring-[#128ced]/20"
+                />
+                <div className="grid grid-cols-2 gap-3">
+                  {(["morning", "evening"] as const).map((period) => (
+                    <button
+                      key={period}
+                      type="button"
+                      aria-pressed={startPeriod === period}
+                      onClick={() => setStartPeriod(period)}
+                      className={`rounded-xl border-2 px-4 py-3 font-bold transition ${startPeriod === period ? "border-[#128ced] bg-[#128ced] text-white" : "border-[#128ced]/20 bg-[#f5f9ff] text-[#128ced] hover:border-[#128ced]"}`}
+                    >
+                      {period === "morning" ? "Morning" : "Evening"}
+                    </button>
+                  ))}
                 </div>
-              </label>
-
-              {/* End Date */}
-              <label className="flex w-full min-w-0 flex-col gap-2 text-sm font-semibold">
-                End Date
-                <div className="w-full min-w-0 overflow-hidden rounded-xl border border-black/10 bg-[#f5f9ff]">
-                  <input
-                    type="date"
-                    name="endDate"
-                    min={startDate || todayString}
-                    value={endDate}
-                    onChange={(e) => setEndDate(e.target.value)}
-                    required
-                    style={{
-                      width: "100%",
-                      minWidth: 0,
-                      maxWidth: "100%",
-                      boxSizing: "border-box",
-                    }}
-                    className="block appearance-none border-0 bg-transparent px-3 py-3 font-normal text-[#1f2a24] outline-none focus:ring-2 focus:ring-inset focus:ring-[#128ced]/20"
-                  />
+                <input type="hidden" name="startPeriod" value={startPeriod} />
+              </div>
+              <div className="grid min-w-0 gap-3">
+                <label htmlFor="endDate" className="text-sm font-semibold">Ending</label>
+                <input
+                  id="endDate"
+                  type="date"
+                  name="endDate"
+                  min={startDate || todayString}
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                  required
+                  className="block box-border w-full min-w-0 rounded-xl border border-black/10 bg-[#f5f9ff] px-3 py-3 font-normal text-[#1f2a24] outline-none focus:ring-2 focus:ring-[#128ced]/20"
+                />
+                <div className="grid grid-cols-2 gap-3">
+                  {(["morning", "evening"] as const).map((period) => (
+                    <button
+                      key={period}
+                      type="button"
+                      aria-pressed={endPeriod === period}
+                      onClick={() => setEndPeriod(period)}
+                      className={`rounded-xl border-2 px-4 py-3 font-bold transition ${endPeriod === period ? "border-[#128ced] bg-[#128ced] text-white" : "border-[#128ced]/20 bg-[#f5f9ff] text-[#128ced] hover:border-[#128ced]"}`}
+                    >
+                      {period === "morning" ? "Morning" : "Evening"}
+                    </button>
+                  ))}
                 </div>
-              </label>
+                <input type="hidden" name="endPeriod" value={endPeriod} />
+              </div>
             </div>
           </section>
 
@@ -401,15 +405,15 @@ export default function Home() {
               </span>
             </div>
 
-            {petCount > 0 && totalDays > 0 ? (
+            {petCount > 0 && totalVisits > 0 ? (
               <p className="mt-2 text-sm text-gray-500">
-                {totalDays} {totalDays === 1 ? "day" : "days"} ×
-                {" "}${dailyRate} per day
+                {totalVisits} {totalVisits === 1 ? "visit" : "visits"} ×
+                {" "}${visitRate} per visit
                 {" "}({petCount} {petCount === 1 ? "pet" : "pets"})
               </p>
             ) : (
               <p className="mt-2 text-sm text-gray-500">
-                Select your number of pets and sitting dates to calculate the total.
+                Select your number of pets, dates, and visit times to calculate the total.
               </p>
             )}
           </section>
