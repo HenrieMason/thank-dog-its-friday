@@ -4,7 +4,20 @@
 import { useState } from "react";
 
 export default function Home() {
-  const [petCount, setPetCount] = useState(0);
+  const [petCount, setPetCount] = useState("");
+  const [startDate, setStartDate] = useState("");
+
+  const numberOfPets = Math.min(
+    20,
+    Math.max(0, Math.floor(Number(petCount) || 0))
+  );
+
+  const today = new Date();
+  const todayString = [
+    today.getFullYear(),
+    String(today.getMonth() + 1).padStart(2, "0"),
+    String(today.getDate()).padStart(2, "0"),
+  ].join("-");
 
   return (
     <main className="min-h-screen bg-[#128ced] text-white">
@@ -21,24 +34,25 @@ export default function Home() {
         {/* Title */}
         <section className="text-center">
           <h1 className="text-3xl font-black tracking-tight text-white sm:text-5xl">
-            Southern Oregon Dog Sitter
+            Southern Oregon Pet Sitter
           </h1>
 
           <p className="mx-auto mt-5 max-w-xl text-base leading-7 text-white/90 sm:text-lg">
-            Looking for someone you can trust with your dog while you&apos;re
-            away? Tell me a little about you and your pets below.
+            Rates: $35 per day. Visits twice a day.
           </p>
         </section>
 
         {/* Questions */}
         <form className="mt-12 grid gap-6 rounded-[2rem] border border-white/20 bg-white p-6 text-[#1f2a24] shadow-xl sm:p-10">
           <Input
+            name="fullName"
             label="What is your full name?"
             placeholder="First and last name"
             required
           />
 
           <Input
+            name="phone"
             label="What is your phone number?"
             placeholder="(555) 555-5555"
             type="tel"
@@ -46,6 +60,7 @@ export default function Home() {
           />
 
           <Input
+            name="email"
             label="What is your email?"
             placeholder="you@example.com"
             type="email"
@@ -56,54 +71,54 @@ export default function Home() {
           <label className="grid gap-2 text-[15px] font-bold sm:text-base">
             How many pets do you have?
             <input
+              name="petCount"
               type="number"
-              min="0"
+              min="1"
               max="20"
-              value={petCount || ""}
-              onChange={(e) => {
-                const value = Number(e.target.value);
-                setPetCount(
-                  Math.max(0, Math.min(20, value))
-                );
-              }}
-              placeholder="Enter number of pets"
+              step="1"
+              value={petCount}
+              onChange={(e) => setPetCount(e.target.value)}
+              placeholder="Number of pets"
               required
-              className="rounded-xl border border-black/10 bg-[#f5f9ff] px-4 py-3 font-normal text-[#1f2a24] outline-none transition focus:border-[#128ced] focus:ring-2 focus:ring-[#128ced]/20"
+              className="w-full rounded-xl border border-black/10 bg-[#f5f9ff] px-4 py-3 font-normal text-[#1f2a24] outline-none transition placeholder:text-gray-400 focus:border-[#128ced] focus:ring-2 focus:ring-[#128ced]/20"
             />
           </label>
 
           {/* Dynamic Pet Questions */}
-          {Array.from({ length: petCount }, (_, index) => (
+          {Array.from({ length: numberOfPets }, (_, index) => (
             <section
               key={index}
-              className="grid gap-5 rounded-2xl border border-[#128ced]/20 bg-[#f5f9ff] p-5"
+              className="grid gap-5 rounded-2xl border border-[#128ced]/20 bg-[#f5f9ff] p-5 sm:p-6"
             >
               <h2 className="text-xl font-black text-[#128ced]">
                 Pet #{index + 1}
               </h2>
 
               <Input
+                name={`pet${index + 1}Name`}
                 label="Name?"
                 placeholder="Pet's name"
                 required
               />
 
               <Input
+                name={`pet${index + 1}Breed`}
                 label="Breed?"
-                placeholder="Golden Retriever, Labrador, etc."
+                placeholder="Breed or type of pet"
                 required
               />
 
               <Input
+                name={`pet${index + 1}Allergies`}
                 label="Allergies?"
-                placeholder="List any allergies or enter None"
+                placeholder="None, or list any allergies"
               />
 
               <label className="grid gap-2 text-[15px] font-bold sm:text-base">
                 Personality?
                 <textarea
-                  name={`pet-${index + 1}-personality`}
-                  className="min-h-28 resize-y rounded-xl border border-black/10 bg-white px-4 py-3 font-normal leading-6 text-[#1f2a24] outline-none transition placeholder:text-gray-400 focus:border-[#128ced] focus:ring-2 focus:ring-[#128ced]/20"
+                  name={`pet${index + 1}Personality`}
+                  className="min-h-28 w-full resize-y rounded-xl border border-black/10 bg-white px-4 py-3 font-normal leading-6 text-[#1f2a24] outline-none transition placeholder:text-gray-400 focus:border-[#128ced] focus:ring-2 focus:ring-[#128ced]/20"
                   placeholder="Friendly, energetic, shy, playful, etc."
                 />
               </label>
@@ -122,8 +137,11 @@ export default function Home() {
                 <input
                   type="date"
                   name="startDate"
+                  min={todayString}
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
                   required
-                  className="min-w-0 w-full rounded-xl border border-black/10 bg-[#f5f9ff] px-4 py-3 font-normal text-[#1f2a24] outline-none focus:border-[#128ced] focus:ring-2 focus:ring-[#128ced]/20"
+                  className="w-full min-w-0 rounded-xl border border-black/10 bg-[#f5f9ff] px-4 py-3 font-normal text-[#1f2a24] outline-none transition focus:border-[#128ced] focus:ring-2 focus:ring-[#128ced]/20"
                 />
               </label>
 
@@ -132,8 +150,10 @@ export default function Home() {
                 <input
                   type="date"
                   name="endDate"
+                  min={startDate || todayString}
+                  key={startDate}
                   required
-                  className="min-w-0 w-full rounded-xl border border-black/10 bg-[#f5f9ff] px-4 py-3 font-normal text-[#1f2a24] outline-none focus:border-[#128ced] focus:ring-2 focus:ring-[#128ced]/20"
+                  className="w-full min-w-0 rounded-xl border border-black/10 bg-[#f5f9ff] px-4 py-3 font-normal text-[#1f2a24] outline-none transition focus:border-[#128ced] focus:ring-2 focus:ring-[#128ced]/20"
                 />
               </label>
             </div>
@@ -141,6 +161,7 @@ export default function Home() {
 
           {/* Address */}
           <Input
+            name="address"
             label="What is your address?"
             placeholder="Street address, city, ZIP code"
             required
@@ -151,12 +172,11 @@ export default function Home() {
             Is there anything else I should know?
             <textarea
               name="additionalInfo"
-              className="min-h-32 resize-y rounded-xl border border-black/10 bg-[#f5f9ff] px-4 py-3 font-normal leading-6 text-[#1f2a24] outline-none transition placeholder:text-gray-400 focus:border-[#128ced] focus:ring-2 focus:ring-[#128ced]/20"
+              className="min-h-28 w-full resize-y rounded-xl border border-black/10 bg-[#f5f9ff] px-4 py-3 font-normal leading-6 text-[#1f2a24] outline-none transition placeholder:text-gray-400 focus:border-[#128ced] focus:ring-2 focus:ring-[#128ced]/20"
               placeholder="Feeding schedules, medications, special instructions, or anything else you'd like to share..."
             />
           </label>
 
-          {/* Submit Button */}
           <button
             type="submit"
             className="mt-2 rounded-xl bg-[#128ced] px-8 py-4 text-lg font-bold text-white shadow-sm transition hover:bg-[#0875cc]"
@@ -195,11 +215,13 @@ export default function Home() {
 }
 
 function Input({
+  name,
   label,
   placeholder,
   type = "text",
   required = false,
 }: {
+  name: string;
   label: string;
   placeholder: string;
   type?: string;
@@ -209,10 +231,11 @@ function Input({
     <label className="grid gap-2 text-[15px] font-bold text-[#1f2a24] sm:text-base">
       {label}
       <input
+        name={name}
         type={type}
         placeholder={placeholder}
         required={required}
-        className="rounded-xl border border-black/10 bg-[#f5f9ff] px-4 py-3 font-normal text-[#1f2a24] outline-none transition placeholder:text-gray-400 focus:border-[#128ced] focus:ring-2 focus:ring-[#128ced]/20"
+        className="w-full rounded-xl border border-black/10 bg-[#f5f9ff] px-4 py-3 font-normal text-[#1f2a24] outline-none transition placeholder:text-gray-400 focus:border-[#128ced] focus:ring-2 focus:ring-[#128ced]/20"
       />
     </label>
   );
