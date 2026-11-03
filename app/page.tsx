@@ -80,7 +80,7 @@ export default function Home() {
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#128ced] text-white">
       {/* Full-width Logo */}
-      <div className="w-full px-4 pt-6 sm:px-8 sm:pt-8">
+      <div className="w-full px-4 pt-6 pb-6 sm:px-8 sm:pt-8">
         <img
           src="/thankdogitsfriday.png"
           alt="Thank Dog It's Friday"
@@ -88,24 +88,26 @@ export default function Home() {
         />
       </div>
 
-      {/* Subtitle */}
-      <div className="px-5 text-center">
-        <h1 className="text-base font-semibold text-white sm:text-lg">
-          Southern Oregon Pet Sitter
-        </h1>
-      </div>
+      
+        {/* Subtitle */}
+        <div className="px-5 text-center">
+          <h1 className="text-base font-semibold text-white sm:text-lg">
+            Southern Oregon Pet Sitter
+          </h1>
+        </div>
 
-      <div className="mx-auto max-w-2xl px-5 pb-12 pt-6 sm:px-6 sm:pb-16">
+        {/* Service Area */}
+        <div className="mt-6 px-5 text-center">
+          <p className="text-[11px] font-medium leading-5 text-white sm:text-xs">
+            Grants Pass • Central Point • Medford • White City • Eagle Point
+          </p>
+        </div>
 
-      {/* Service Area */}
-<section className="w-full text-center">
-  <p className="text-[11px] font-medium leading-5 text-white sm:text-xs">
-    Grants Pass • Central Point • Medford • White City • Eagle Point
-  </p>
-</section>
 
+        {/* Main Content Container */}
+        <div className="mx-auto max-w-2xl px-5 pb-12 pt-6 sm:px-6 sm:pb-16">
         {/* Pricing Bubble */}
-        <section className="mt-6 rounded-[2rem] border border-white/20 bg-white px-4 py-7 text-[#1f2a24] shadow-xl sm:px-10">
+        <section className="rounded-[2rem] border border-white/20 bg-white px-4 py-7 text-[#1f2a24] shadow-xl sm:px-10">
           <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-3 sm:gap-6">
             <div className="text-center">
               <p className="text-2xl font-black text-[#128ced] sm:text-4xl">
