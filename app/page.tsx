@@ -4,13 +4,8 @@
 import { useState } from "react";
 
 export default function Home() {
-  const [petCount, setPetCount] = useState("");
+  const [petCount, setPetCount] = useState(0);
   const [startDate, setStartDate] = useState("");
-
-  const numberOfPets = Math.min(
-    20,
-    Math.max(0, Math.floor(Number(petCount) || 0))
-  );
 
   const today = new Date();
   const todayString = [
@@ -38,17 +33,33 @@ export default function Home() {
       </div>
 
       <div className="mx-auto max-w-2xl px-5 pb-12 pt-6 sm:px-6 sm:pb-16">
-        {/* Rates Bubble */}
-        <section className="rounded-[2rem] border border-white/20 bg-white px-6 py-6 text-center text-[#1f2a24] shadow-xl">
-          <p className="text-3xl font-black text-[#128ced] sm:text-4xl">
-            $35
-          </p>
+        {/* Pricing Bubble */}
+        <section className="rounded-[2rem] border border-white/20 bg-white px-4 py-7 text-[#1f2a24] shadow-xl sm:px-10">
+          <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-3 sm:gap-6">
+            <div className="text-center">
+              <p className="text-2xl font-black text-[#128ced] sm:text-4xl">
+                $35
+              </p>
+              <p className="mt-1 text-sm font-semibold sm:text-base">
+                per Day
+              </p>
+            </div>
 
-          <p className="mt-1 text-base font-semibold">
-            per Day
-          </p>
+            <span className="text-3xl font-light text-gray-400 sm:text-4xl">
+              +
+            </span>
 
-          <p className="mt-2 text-sm text-gray-500">
+            <div className="text-center">
+              <p className="text-2xl font-black text-[#128ced] sm:text-4xl">
+                $10
+              </p>
+              <p className="mt-1 text-sm font-semibold sm:text-base">
+                per Pet
+              </p>
+            </div>
+          </div>
+
+          <p className="mt-5 text-center text-sm text-gray-500">
             Two visits per day
           </p>
         </section>
@@ -78,25 +89,39 @@ export default function Home() {
             required
           />
 
-          {/* Number of Pets */}
-          <label className="grid min-w-0 gap-2 text-[15px] font-bold sm:text-base">
-            How many pets do you have?
-            <input
-              name="petCount"
-              type="number"
-              min="1"
-              max="20"
-              step="1"
-              value={petCount}
-              onChange={(e) => setPetCount(e.target.value)}
-              placeholder="Number of pets"
-              required
-              className="box-border w-full min-w-0 rounded-xl border border-black/10 bg-[#f5f9ff] px-4 py-3 font-normal text-[#1f2a24] outline-none transition placeholder:text-gray-400 focus:border-[#128ced] focus:ring-2 focus:ring-[#128ced]/20"
-            />
-          </label>
+          {/* Pet Count Selection */}
+          <fieldset className="grid min-w-0 gap-3">
+            <legend className="mb-3 text-[15px] font-bold sm:text-base">
+              How many pets do you have?
+            </legend>
+
+            <div className="grid grid-cols-5 gap-2 sm:gap-3">
+              {[1, 2, 3, 4, 5].map((count) => (
+                <label
+                  key={count}
+                  className={`flex aspect-square cursor-pointer items-center justify-center rounded-xl border-2 text-lg font-black transition ${
+                    petCount === count
+                      ? "border-[#128ced] bg-[#128ced] text-white shadow-md"
+                      : "border-[#128ced]/20 bg-[#f5f9ff] text-[#128ced] hover:border-[#128ced]"
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="petCount"
+                    value={count}
+                    checked={petCount === count}
+                    onChange={() => setPetCount(count)}
+                    required
+                    className="sr-only"
+                  />
+                  {count}
+                </label>
+              ))}
+            </div>
+          </fieldset>
 
           {/* Dynamic Pet Questions */}
-          {Array.from({ length: numberOfPets }, (_, index) => (
+          {Array.from({ length: petCount }, (_, index) => (
             <section
               key={index}
               className="grid min-w-0 gap-5 rounded-2xl border border-[#128ced]/20 bg-[#f5f9ff] p-4 sm:p-6"
@@ -135,37 +160,55 @@ export default function Home() {
               </label>
             </section>
           ))}
-
+          
           {/* Sitting Dates */}
-          <section className="grid min-w-0 gap-4">
-            <h2 className="text-[15px] font-bold sm:text-base">
+          <section className="w-full min-w-0 max-w-full overflow-hidden">
+            <h2 className="mb-4 text-[15px] font-bold sm:text-base">
               What dates do you need a sitter?
             </h2>
 
-            <div className="grid min-w-0 grid-cols-1 gap-4 sm:grid-cols-2">
-              <label className="grid min-w-0 gap-2 text-sm font-semibold">
+            <div className="flex w-full min-w-0 flex-col gap-4">
+              {/* Start Date */}
+              <label className="flex w-full min-w-0 flex-col gap-2 text-sm font-semibold">
                 Start Date
-                <input
-                  type="date"
-                  name="startDate"
-                  min={todayString}
-                  value={startDate}
-                  onChange={(e) => setStartDate(e.target.value)}
-                  required
-                  className="block box-border w-full min-w-0 max-w-full rounded-xl border border-black/10 bg-[#f5f9ff] px-3 py-3 font-normal text-[#1f2a24] outline-none transition focus:border-[#128ced] focus:ring-2 focus:ring-[#128ced]/20"
-                />
+                <div className="w-full min-w-0 overflow-hidden rounded-xl border border-black/10 bg-[#f5f9ff]">
+                  <input
+                    type="date"
+                    name="startDate"
+                    min={todayString}
+                    value={startDate}
+                    onChange={(e) => setStartDate(e.target.value)}
+                    required
+                    style={{
+                      width: "100%",
+                      minWidth: 0,
+                      maxWidth: "100%",
+                      boxSizing: "border-box",
+                    }}
+                    className="block appearance-none border-0 bg-transparent px-3 py-3 font-normal text-[#1f2a24] outline-none focus:ring-2 focus:ring-inset focus:ring-[#128ced]/20"
+                  />
+                </div>
               </label>
 
-              <label className="grid min-w-0 gap-2 text-sm font-semibold">
+              {/* End Date */}
+              <label className="flex w-full min-w-0 flex-col gap-2 text-sm font-semibold">
                 End Date
-                <input
-                  type="date"
-                  name="endDate"
-                  min={startDate || todayString}
-                  key={startDate}
-                  required
-                  className="block box-border w-full min-w-0 max-w-full rounded-xl border border-black/10 bg-[#f5f9ff] px-3 py-3 font-normal text-[#1f2a24] outline-none transition focus:border-[#128ced] focus:ring-2 focus:ring-[#128ced]/20"
-                />
+                <div className="w-full min-w-0 overflow-hidden rounded-xl border border-black/10 bg-[#f5f9ff]">
+                  <input
+                    type="date"
+                    name="endDate"
+                    min={startDate || todayString}
+                    key={startDate}
+                    required
+                    style={{
+                      width: "100%",
+                      minWidth: 0,
+                      maxWidth: "100%",
+                      boxSizing: "border-box",
+                    }}
+                    className="block appearance-none border-0 bg-transparent px-3 py-3 font-normal text-[#1f2a24] outline-none focus:ring-2 focus:ring-inset focus:ring-[#128ced]/20"
+                  />
+                </div>
               </label>
             </div>
           </section>
@@ -198,7 +241,7 @@ export default function Home() {
         </form>
 
         {/* Meet the Owner */}
-        <section className="mt-20 rounded-[2rem] border border-white/20 bg-white/15 px-6 py-10 text-center shadow-sm sm:px-10 sm:py-12">
+        <section className="mt-6 rounded-[2rem] border border-white/20 bg-white/15 px-6 py-10 text-center shadow-sm sm:px-10 sm:py-12">
           <h2 className="text-3xl font-black tracking-tight text-white sm:text-4xl">
             Meet the Owner
           </h2>
