@@ -327,6 +327,7 @@ export default function Home() {
             <div className="flex w-full min-w-0 flex-col gap-5">
               <div className="grid min-w-0 gap-3">
                 <label htmlFor="startDate" className="text-sm font-semibold">Starting</label>
+                <div className="w-full min-w-0 overflow-hidden rounded-xl border border-black/10 bg-[#f5f9ff]">
                 <input
                   id="startDate"
                   type="date"
@@ -339,8 +340,15 @@ export default function Home() {
                     if (endDate && endDate < next) setEndDate("");
                   }}
                   required
-                  className="block box-border w-full min-w-0 rounded-xl border border-black/10 bg-[#f5f9ff] px-3 py-3 font-normal text-[#1f2a24] outline-none focus:ring-2 focus:ring-[#128ced]/20"
+                  style={{
+                    width: "100%",
+                    minWidth: 0,
+                    maxWidth: "100%",
+                    boxSizing: "border-box",
+                  }}
+                  className="block w-full min-w-0 max-w-full appearance-none border-0 bg-transparent px-3 py-3 font-normal text-[#1f2a24] outline-none focus:ring-2 focus:ring-inset focus:ring-[#128ced]/20"
                 />
+                </div>
                 <div className="grid grid-cols-2 gap-3">
                   {(["morning", "evening"] as const).map((period) => (
                     <button
@@ -358,6 +366,7 @@ export default function Home() {
               </div>
               <div className="grid min-w-0 gap-3">
                 <label htmlFor="endDate" className="text-sm font-semibold">Ending</label>
+                <div className="w-full min-w-0 overflow-hidden rounded-xl border border-black/10 bg-[#f5f9ff]">
                 <input
                   id="endDate"
                   type="date"
@@ -366,8 +375,15 @@ export default function Home() {
                   value={endDate}
                   onChange={(e) => setEndDate(e.target.value)}
                   required
-                  className="block box-border w-full min-w-0 rounded-xl border border-black/10 bg-[#f5f9ff] px-3 py-3 font-normal text-[#1f2a24] outline-none focus:ring-2 focus:ring-[#128ced]/20"
+                  style={{
+                    width: "100%",
+                    minWidth: 0,
+                    maxWidth: "100%",
+                    boxSizing: "border-box",
+                  }}
+                  className="block w-full min-w-0 max-w-full appearance-none border-0 bg-transparent px-3 py-3 font-normal text-[#1f2a24] outline-none focus:ring-2 focus:ring-inset focus:ring-[#128ced]/20"
                 />
+                </div>
                 <div className="grid grid-cols-2 gap-3">
                   {(["morning", "evening"] as const).map((period) => (
                     <button
