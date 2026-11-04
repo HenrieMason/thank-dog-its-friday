@@ -70,8 +70,8 @@ export default function Home() {
   };
 
   const totalVisits = calculateVisits();
-  // Two visits cost $40 for the first pet, plus $10 per additional pet.
-  const visitRate = petCount > 0 ? 20 + (petCount - 1) * 5 : 0;
+  // Two visits cost $50 for the first pet, plus $10 per additional pet.
+  const visitRate = petCount > 0 ? 25 + (petCount - 1) * 5 : 0;
   const total = visitRate * totalVisits;
 
   return (
@@ -106,7 +106,7 @@ export default function Home() {
           <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-3 sm:gap-6">
             <div className="text-center">
               <p className="text-2xl font-black text-[#128ced] sm:text-4xl">
-                $20
+                $25
               </p>
               <p className="mt-1 text-sm font-semibold sm:text-base">
                 per Visit
@@ -131,7 +131,7 @@ export default function Home() {
             Two visits per day, 30 minutes each
           </p>
           <p className="mt-2 text-center text-sm text-gray-500">
-            Example: 2 full days, 2 pets = $100
+            Example: 2 full days, 2 pets = $120
           </p>
         </section>
 
