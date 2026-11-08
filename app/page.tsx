@@ -187,14 +187,16 @@ export default function Home() {
 
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#128ced] text-white">
-      {/* Full-width Logo */}
-      <div className="w-full px-4 pt-6 sm:px-8 sm:pt-8">
+      
+      {/* Logo */}
+      <div className="w-full px-12 pt-6 sm:px-24 sm:pt-8">
         <img
           src="/thankdogitsfriday.png"
           alt="Thank Dog It's Friday"
-          className="mx-auto block h-auto w-full max-w-6xl object-contain"
+          className="mx-auto block h-auto w-full max-w-3xl object-contain"
         />
       </div>
+
 
       {/* Subtitle */}
       <div className="px-5 text-center">
