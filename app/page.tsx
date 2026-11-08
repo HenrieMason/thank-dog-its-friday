@@ -591,25 +591,53 @@ export default function Home() {
           </button>
         </form>
 
-        {/* Meet the Owner */}
-        <section className="mt-6 rounded-[2rem] border border-white/20 bg-white/15 px-6 py-10 text-center shadow-sm sm:px-10 sm:py-12">
-          <h2 className="text-3xl font-black tracking-tight text-white sm:text-4xl">
-            Meet the Owner
-          </h2>
+        
+      {/* Meet the Owner */}
+      <section className="mt-6 rounded-[2rem] border border-white/20 bg-white/15 px-6 py-10 text-center shadow-sm sm:px-10 sm:py-12">
+        <h2 className="text-3xl font-black tracking-tight text-white sm:text-4xl">
+          Meet the Owner
+        </h2>
 
-          <p className="mt-6 text-base leading-8 text-white/95 sm:text-lg">
-            Hi, I&apos;m Ava! I&apos;m a local dog sitter serving the Medford
-            and Grants Pass area. I&apos;ve always loved animals and know how
-            important it is to have someone you trust taking care of your dog
-            while you&apos;re away.
-          </p>
+        <h3 className="mt-5 text-xl font-bold text-white sm:text-2xl">
+          Hi, I'm Ava!
+        </h3>
 
-          <p className="mt-4 text-base leading-8 text-white/95 sm:text-lg">
-            My goal is to make sure every dog feels safe, comfortable, and
-            loved. I&apos;ll treat your dog like one of my own and keep you
-            updated so you can relax knowing they&apos;re in good hands.
-          </p>
-        </section>
+        <p className="mt-5 text-base leading-8 text-white/95 sm:text-lg">
+          I've called the Rogue Valley home since 2018, and caring for
+          animals has always been a huge part of my life. From dogs
+          and cats to horses and farm animals, I love getting to know
+          each animal's unique personality.
+        </p>
+
+        <p className="mt-4 text-base leading-8 text-white/95 sm:text-lg">
+          I spent four years working at R&R Pet Resort in Phoenix,
+          Oregon, where I gained hands-on experience caring for dogs
+          and cats, administering medications, following feeding
+          routines, and making sure every animal was safe, happy,
+          and comfortable.
+        </p>
+
+        <p className="mt-4 text-base leading-8 text-white/95 sm:text-lg">
+          I also volunteered at Roxy Rose Ranch in East Medford,
+          gaining valuable experience working with horses. Alongside
+          my professional experience, I've continued providing
+          independent pet sitting and house sitting for local
+          families.
+        </p>
+
+        <p className="mt-4 text-base leading-8 text-white/95 sm:text-lg">
+          Whether your pet is energetic and playful, shy and nervous,
+          or a senior who needs a little extra attention, my goal
+          is to give them the same patience, affection, and care
+          I'd want someone to give my own.
+        </p>
+
+        <p className="mt-6 text-lg font-bold leading-8 text-white">
+          Because your dog deserves a good Friday, every day —
+          and you do too! 🐾
+        </p>
+      </section>
+
 
         {/* Footer */}
         <footer className="mt-6 border-t border-white/25 pt-8 text-center text-sm text-white/80">
