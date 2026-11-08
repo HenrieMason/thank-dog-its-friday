@@ -15,6 +15,9 @@ export default function Home() {
   const [startPeriod, setStartPeriod] = useState<"morning" | "evening">("morning");
   const [endPeriod, setEndPeriod] = useState<"morning" | "evening">("evening");
   const [phone, setPhone] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitMessage, setSubmitMessage] = useState("");
+  const [submitSuccess, setSubmitSuccess] = useState(false);
 
   const [petDetails, setPetDetails] = useState<PetDetails[]>(
     Array.from({ length: 5 }, () => ({
@@ -73,6 +76,114 @@ export default function Home() {
   // Two visits cost $50 for the first pet, plus $10 per additional pet.
   const visitRate = petCount > 0 ? 25 + (petCount - 1) * 5 : 0;
   const total = visitRate * totalVisits;
+
+
+  const handleSubmit = async (
+    event: React.FormEvent<HTMLFormElement>
+  ) => {
+    event.preventDefault();
+
+    if (isSubmitting) return;
+
+    if (petCount < 1) {
+      setSubmitSuccess(false);
+      setSubmitMessage("Please select how many pets you have.");
+      return;
+    }
+
+    if (totalVisits <= 0) {
+      setSubmitSuccess(false);
+      setSubmitMessage("Please select valid booking dates.");
+      return;
+    }
+
+    setIsSubmitting(true);
+    setSubmitMessage("");
+    setSubmitSuccess(false);
+
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+
+    const get = (name: string) =>
+      String(formData.get(name) ?? "").trim();
+
+    const pets = Array.from({ length: petCount }, (_, i) => {
+      const n = i + 1;
+
+      return {
+        name: get(`pet${n}Name`),
+        breed: get(`pet${n}Breed`),
+        allergies: get(`pet${n}Allergies`),
+        allergyDetails: get(`pet${n}AllergyDetails`),
+        medications: get(`pet${n}Medications`),
+        medicationDetails: get(`pet${n}MedicationDetails`),
+        personality: get(`pet${n}Personality`),
+      };
+    });
+
+    const booking = {
+      fullName: get("fullName"),
+      phone: get("phone"),
+      email: get("email"),
+      streetAddress: get("streetAddress"),
+      city: get("city"),
+      zipCode: get("zipCode"),
+      petCount,
+      pets,
+      startDate,
+      startPeriod,
+      endDate,
+      endPeriod,
+      totalVisits,
+      total,
+      additionalInfo: get("additionalInfo"),
+    };
+
+    try {
+      const response = await fetch("/api/booking", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(booking),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.error || "Submission failed.");
+      }
+
+      setSubmitSuccess(true);
+      setSubmitMessage(
+        "Request sent successfully! We'll contact you shortly."
+      );
+
+      form.reset();
+      setPetCount(0);
+      setPetDetails(
+        Array.from({ length: 5 }, () => ({
+          allergies: "",
+          medications: "",
+        }))
+      );
+      setPhone("");
+      setStartDate("");
+      setEndDate("");
+      setStartPeriod("morning");
+      setEndPeriod("evening");
+    } catch (error) {
+      setSubmitSuccess(false);
+      setSubmitMessage(
+        error instanceof Error
+          ? error.message
+          : "Something went wrong. Please try again."
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
 
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#128ced] text-white">
@@ -136,7 +247,10 @@ export default function Home() {
         </section>
 
         {/* Request Form */}
-        <form className="mt-6 grid min-w-0 gap-6 rounded-[2rem] border border-white/20 bg-white p-5 text-[#1f2a24] shadow-xl sm:p-10">
+        <form
+          onSubmit={handleSubmit}
+          className="mt-6 grid min-w-0 gap-6 rounded-[2rem] border border-white/20 bg-white p-5 text-[#1f2a24] shadow-xl sm:p-10"
+        >
           <Input
             name="fullName"
             label="What is your full name?"
@@ -451,12 +565,27 @@ export default function Home() {
             </div>
           </div>
 
+          {/* Submission Message */}
+          {submitMessage && (
+            <div
+              role="status"
+              className={`rounded-xl p-4 text-center font-semibold ${
+                submitSuccess
+                  ? "bg-green-100 text-green-800"
+                  : "bg-red-100 text-red-800"
+              }`}
+            >
+              {submitMessage}
+            </div>
+          )}
+
           {/* Submit Button */}
           <button
             type="submit"
-            className="mt-2 rounded-xl bg-[#128ced] px-8 py-4 text-lg font-bold text-white shadow-sm transition hover:bg-[#0875cc]"
+            disabled={isSubmitting}
+            className="mt-2 rounded-xl bg-[#128ced] px-8 py-4 text-lg font-bold text-white shadow-sm transition hover:bg-[#0875cc] disabled:cursor-not-allowed disabled:opacity-60"
           >
-            Send Request
+            {isSubmitting ? "Sending Request..." : "Send Request"}
           </button>
         </form>
 
