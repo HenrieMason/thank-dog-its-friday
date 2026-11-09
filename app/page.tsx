@@ -208,17 +208,15 @@ export default function Home() {
 
       <div className="mx-auto max-w-2xl px-5 pb-12 pt-6 sm:px-6 sm:pb-16">
 
-      
       {/* Service Area Bubble */}
       <section className="w-full rounded-[2rem] border border-white/20 bg-white px-4 py-3 text-center text-[#128ced] shadow-xl sm:px-10">
-        <p className="text-[11px] font-medium leading-5 sm:text-xs">
-          Grants Pass • Central Point • Medford • White City • Eagle Point
-        </p>
-        <p className="mt-1 text-sm font-bold leading-6 sm:text-base">
+        <p className="text-sm font-bold leading-6 sm:text-base">
           Dogs • Cats • Horses • Goats
         </p>
+        <p className="mt-1 text-[11px] font-medium leading-5 sm:text-xs">
+          Grants Pass • Central Point • Medford • White City • Eagle Point
+        </p>
       </section>
-
 
         {/* Pricing Bubble */}
         <section className="mt-6 rounded-[2rem] border border-white/20 bg-white px-4 py-7 text-[#1f2a24] shadow-xl sm:px-10">
