@@ -14,7 +14,7 @@ const SERVICES = [
   {
     id: "pet" as Service,
     title: "Pet Sitting",
-    price: "$75 / day",
+    price: "$100 / day",
     description: "Three Visits Daily",
     detail: "+ $5 per additional pet per day",
   },
@@ -289,7 +289,7 @@ export default function Home() {
     service === "farm"
       ? 90
       : service === "pet"
-        ? 75 + Math.max(0, petCount - 1) * 5
+        ? 100 + Math.max(0, petCount - 1) * 5
         : 25 + Math.max(0, petCount - 1) * 5;
 
   const total =
