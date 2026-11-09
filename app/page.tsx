@@ -211,7 +211,7 @@ export default function Home() {
       {/* Service Area Bubble */}
       <section className="w-full rounded-[2rem] border border-white/20 bg-white px-4 py-3 text-center text-[#128ced] shadow-xl sm:px-10">
         <p className="text-sm font-bold leading-6 sm:text-base">
-          Dogs • Cats • Horses • Goats
+          Dogs • Cats • Horses • Goats • Fish
         </p>
         <p className="mt-1 text-[11px] font-medium leading-5 sm:text-xs">
           Grants Pass • Central Point • Medford • White City • Eagle Point
