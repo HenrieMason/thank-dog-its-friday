@@ -15,21 +15,21 @@ const SERVICES = [
     id: "pet" as Service,
     title: "Pet Sitting",
     price: "$75 / day",
-    description: "Three visits daily: morning, afternoon, and night.",
+    description: "Three Visits Daily",
     detail: "+ $5 per additional pet per day",
   },
   {
     id: "farm" as Service,
     title: "Farm Sitting",
-    price: "$75 / day",
-    description: "Two visits daily for your farm animals.",
+    price: "$90 / day",
+    description: "Two Visits Daily",
     detail: "Custom morning and night visit times",
   },
   {
     id: "walk" as Service,
     title: "Dog Walks",
     price: "$25 / walk",
-    description: "Choose 1–5 walks per day.",
+    description: "Choose 1–5 walks per day",
     detail: "+ $5 per additional dog per walk",
   },
 ];
@@ -66,7 +66,7 @@ function getToday() {
 }
 
 const inputClass =
-  "box-border w-full min-w-0 rounded-xl border border-black/10 bg-[#f5f9ff] px-4 py-3 font-normal text-[#1f2a24] outline-none transition placeholder:text-gray-400 focus:border-[#128ced] focus:ring-2 focus:ring-[#128ced]/20";
+  "box-border block w-full min-w-0 max-w-full rounded-xl border border-black/10 bg-[#f5f9ff] px-4 py-3 font-normal text-[#1f2a24] outline-none transition placeholder:text-gray-400 focus:border-[#128ced] focus:ring-2 focus:ring-[#128ced]/20";
 
 const choiceClass = (selected: boolean) =>
   `flex min-h-12 cursor-pointer touch-manipulation items-center justify-center rounded-xl border-2 px-3 py-3 text-center font-bold transition ${
@@ -118,6 +118,7 @@ function YesNoQuestion({
       <legend className="mb-3 text-[15px] font-bold sm:text-base">
         {label}
       </legend>
+
       <div className="grid grid-cols-2 gap-3">
         {["yes", "no"].map((option) => (
           <label
@@ -170,6 +171,49 @@ function TimePicker({
   );
 }
 
+function DateInput({
+  id,
+  label,
+  value,
+  min,
+  onChange,
+}: {
+  id: string;
+  label: string;
+  value: string;
+  min: string;
+  onChange: (value: string) => void;
+}) {
+  return (
+    <div className="grid w-full min-w-0 max-w-full gap-3">
+      <label htmlFor={id} className="text-sm font-semibold">
+        {label}
+      </label>
+
+      <div className="w-full min-w-0 max-w-full overflow-hidden rounded-xl border border-black/10 bg-[#f5f9ff]">
+        <input
+          id={id}
+          name={id}
+          type="date"
+          min={min}
+          value={value}
+          onChange={(event) => onChange(event.target.value)}
+          required
+          style={{
+            display: "block",
+            width: "100%",
+            minWidth: 0,
+            maxWidth: "100%",
+            boxSizing: "border-box",
+            WebkitAppearance: "none",
+          }}
+          className="border-0 bg-transparent px-3 py-3 font-normal text-[#1f2a24] outline-none focus:ring-2 focus:ring-inset focus:ring-[#128ced]/20"
+        />
+      </div>
+    </div>
+  );
+}
+
 export default function Home() {
   const [service, setService] = useState<Service>("pet");
   const [petCount, setPetCount] = useState(0);
@@ -192,7 +236,7 @@ export default function Home() {
   const [submitSuccess, setSubmitSuccess] = useState(false);
 
   const [petDetails, setPetDetails] = useState<PetDetails[]>(
-    Array.from({ length: 5 }, emptyPet)
+    Array.from({ length: 10 }, emptyPet)
   );
 
   const todayString = getToday();
@@ -243,12 +287,11 @@ export default function Home() {
 
   const rate =
     service === "farm"
-      ? 75
+      ? 90
       : service === "pet"
         ? 75 + Math.max(0, petCount - 1) * 5
         : 25 + Math.max(0, petCount - 1) * 5;
 
-  // Sitting is billed by calendar day; walks by selected visit.
   const total =
     petCount > 0 && selectionValid
       ? service === "walk"
@@ -270,17 +313,24 @@ export default function Home() {
 
   const formatPhoneNumber = (value: string) => {
     const digits = value.replace(/\D/g, "").slice(0, 10);
+
     if (!digits.length) return "";
     if (digits.length < 4) return `(${digits}`;
+
     if (digits.length < 7) {
       return `(${digits.slice(0, 3)}) ${digits.slice(3)}`;
     }
+
     return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
   };
 
   const changeService = (next: Service) => {
     setService(next);
     setStartVisit(0);
+
+    if (next !== "farm") {
+      setPetCount((previous) => Math.min(previous, 5));
+    }
 
     if (next === "pet") {
       setVisitTimes(["08:00", "13:00", "19:00"]);
@@ -335,11 +385,13 @@ export default function Home() {
 
     const form = event.currentTarget;
     const formData = new FormData(form);
+
     const get = (name: string) =>
       String(formData.get(name) ?? "").trim();
 
     const pets = Array.from({ length: petCount }, (_, i) => {
       const n = i + 1;
+
       return {
         name: get(`pet${n}Name`),
         breed: get(`pet${n}Breed`),
@@ -400,7 +452,7 @@ export default function Home() {
 
       form.reset();
       setPetCount(0);
-      setPetDetails(Array.from({ length: 5 }, emptyPet));
+      setPetDetails(Array.from({ length: 10 }, emptyPet));
       setPhone("");
       setStartDate("");
       setEndDate("");
@@ -428,6 +480,7 @@ export default function Home() {
         />
       </div>
 
+      {/* Subtitle */}
       <div className="px-5 text-center">
         <h1 className="text-base font-semibold text-white sm:text-lg">
           Southern Oregon Pet Sitter
@@ -435,11 +488,12 @@ export default function Home() {
       </div>
 
       <div className="mx-auto max-w-2xl px-5 pb-12 pt-6 sm:px-6 sm:pb-16">
-        {/* Cities and Animals */}
-        <section className="w-full rounded-[2rem] border border-white/20 bg-white px-4 py-3 text-center text-[#128ced] shadow-xl sm:px-10">
+        {/* Cities and Animals - Blue Bubble */}
+        <section className="w-full rounded-[2rem] border border-white/20 bg-white/15 px-4 py-3 text-center text-white shadow-sm sm:px-10">
           <p className="text-sm font-bold leading-6 sm:text-base">
             Dogs • Cats • Horses • Goats • Fish
           </p>
+
           <p className="mt-1 text-[11px] font-medium leading-5 sm:text-xs">
             Grants Pass • Central Point • Medford • White City • Eagle Point
           </p>
@@ -489,6 +543,7 @@ export default function Home() {
           <p className="mt-7 text-lg font-black leading-8 sm:text-xl">
             Because your dog deserves a good Friday, every day
           </p>
+
           <p className="mt-1 text-lg font-bold sm:text-xl">
             — and you do too! 🐾
           </p>
@@ -517,13 +572,16 @@ export default function Home() {
                   <span className="text-xl font-black">
                     {item.title}
                   </span>
+
                   <span className="text-xl font-black">
                     {item.price}
                   </span>
                 </div>
+
                 <p className="mt-2 text-sm">
                   {item.description}
                 </p>
+
                 <p className="mt-1 text-xs font-semibold opacity-80">
                   {item.detail}
                 </p>
@@ -548,6 +606,7 @@ export default function Home() {
             required
           />
 
+          {/* Phone */}
           <label className="grid min-w-0 gap-2 text-[15px] font-bold sm:text-base">
             What is your phone number?
             <input
@@ -589,6 +648,7 @@ export default function Home() {
             required
           />
 
+          {/* ZIP Code */}
           <label className="grid min-w-0 gap-2 text-[15px] font-bold sm:text-base">
             What is your ZIP code?
             <input
@@ -605,14 +665,17 @@ export default function Home() {
             />
           </label>
 
-          {/* Pet Count */}
+          {/* Number of Pets */}
           <fieldset className="grid min-w-0 gap-3">
             <legend className="mb-3 text-[15px] font-bold sm:text-base">
               How many pets do you have?
             </legend>
 
             <div className="grid grid-cols-5 gap-2 sm:gap-3">
-              {[1, 2, 3, 4, 5].map((count) => (
+              {Array.from(
+                { length: service === "farm" ? 10 : 5 },
+                (_, index) => index + 1
+              ).map((count) => (
                 <button
                   key={count}
                   type="button"
@@ -651,42 +714,6 @@ export default function Home() {
             </fieldset>
           )}
 
-          {/* Custom Visit Times */}
-          <section className="grid min-w-0 gap-4">
-            <div>
-              <h3 className="text-[15px] font-bold sm:text-base">
-                What times work best for your {service === "walk" ? "walks" : "visits"}?
-              </h3>
-              <p className="mt-1 text-sm text-gray-500">
-                Select your preferred daily times. These will also
-                appear in your booking date selections.
-              </p>
-            </div>
-
-            <div className="grid gap-3">
-              {Array.from({ length: visitCount }, (_, index) => (
-                <TimePicker
-                  key={`${service}-${index}`}
-                  label={
-                    service === "pet"
-                      ? ["Morning Visit", "Afternoon Visit", "Night Visit"][index]
-                      : service === "farm"
-                        ? ["Morning Visit", "Night Visit"][index]
-                        : `Walk ${index + 1}`
-                  }
-                  value={visitTimes[index] || ""}
-                  onChange={(value) => updateTime(index, value)}
-                />
-              ))}
-            </div>
-
-            {!timesComplete && (
-              <p className="text-sm font-medium text-amber-700">
-                Please select a different time for each visit.
-              </p>
-            )}
-          </section>
-
           {/* Dynamic Pet Questions */}
           {Array.from({ length: petCount }, (_, index) => (
             <section
@@ -711,6 +738,7 @@ export default function Home() {
                 required
               />
 
+              {/* Allergies */}
               <YesNoQuestion
                 name={`pet${index + 1}Allergies`}
                 label="Does your pet have any allergies?"
@@ -732,6 +760,7 @@ export default function Home() {
                 </label>
               )}
 
+              {/* Medications */}
               <YesNoQuestion
                 name={`pet${index + 1}Medications`}
                 label="Does your pet take any medications?"
@@ -753,6 +782,7 @@ export default function Home() {
                 </label>
               )}
 
+              {/* Personality */}
               <label className="grid min-w-0 gap-2 text-[15px] font-bold sm:text-base">
                 Personality?
                 <textarea
@@ -764,37 +794,75 @@ export default function Home() {
             </section>
           ))}
 
-          {/* Booking Dates */}
-          <section className="grid min-w-0 gap-5">
-            <h2 className="text-[15px] font-bold sm:text-base">
-              When do you need {service === "walk" ? "dog walks" : "a sitter"}?
-            </h2>
+          {/* Custom Visit Times - Below Pet Descriptions */}
+          <section className="grid min-w-0 gap-4">
+            <div>
+              <h3 className="text-[15px] font-bold sm:text-base">
+                What times work best for your{" "}
+                {service === "walk" ? "walks" : "visits"}?
+              </h3>
+
+              <p className="mt-1 text-sm text-gray-500">
+                Select your preferred daily times. These will also
+                appear in your booking date selections.
+              </p>
+            </div>
 
             <div className="grid gap-3">
-              <label htmlFor="startDate" className="text-sm font-semibold">
-                Starting
-              </label>
-              <input
+              {Array.from({ length: visitCount }, (_, index) => (
+                <TimePicker
+                  key={`${service}-${index}`}
+                  label={
+                    service === "pet"
+                      ? [
+                          "Morning Visit",
+                          "Afternoon Visit",
+                          "Night Visit",
+                        ][index]
+                      : service === "farm"
+                        ? ["Morning Visit", "Night Visit"][index]
+                        : `Walk ${index + 1}`
+                  }
+                  value={visitTimes[index] || ""}
+                  onChange={(value) => updateTime(index, value)}
+                />
+              ))}
+            </div>
+
+            {!timesComplete && (
+              <p className="text-sm font-medium text-amber-700">
+                Please select a different time for each visit.
+              </p>
+            )}
+          </section>
+
+          {/* Booking Dates */}
+          <section className="grid w-full min-w-0 max-w-full gap-5">
+            <h2 className="text-[15px] font-bold sm:text-base">
+              When do you need{" "}
+              {service === "walk" ? "dog walks" : "a sitter"}?
+            </h2>
+
+            {/* Starting Date */}
+            <div className="grid w-full min-w-0 max-w-full gap-3">
+              <DateInput
                 id="startDate"
-                name="startDate"
-                type="date"
-                min={todayString}
+                label="Starting"
                 value={startDate}
-                onChange={(event) => {
-                  const next = event.target.value;
+                min={todayString}
+                onChange={(next) => {
                   setStartDate(next);
-                  if (endDate && endDate < next) setEndDate("");
+                  if (endDate && endDate < next) {
+                    setEndDate("");
+                  }
                 }}
-                required
-                className={inputClass}
-                style={{ minWidth: 0, maxWidth: "100%" }}
               />
 
               <p className="text-sm font-semibold">
                 First visit on your starting day
               </p>
 
-              <div className={`grid gap-2 ${visitCount > 3 ? "grid-cols-2 sm:grid-cols-3" : "grid-cols-2 sm:grid-cols-3"}`}>
+              <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
                 {sortedVisits.map((visit, index) => (
                   <button
                     key={`start-${visit.index}`}
@@ -809,27 +877,21 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="grid gap-3">
-              <label htmlFor="endDate" className="text-sm font-semibold">
-                Ending
-              </label>
-              <input
+            {/* Ending Date */}
+            <div className="grid w-full min-w-0 max-w-full gap-3">
+              <DateInput
                 id="endDate"
-                name="endDate"
-                type="date"
-                min={startDate || todayString}
+                label="Ending"
                 value={endDate}
-                onChange={(event) => setEndDate(event.target.value)}
-                required
-                className={inputClass}
-                style={{ minWidth: 0, maxWidth: "100%" }}
+                min={startDate || todayString}
+                onChange={setEndDate}
               />
 
               <p className="text-sm font-semibold">
                 Last visit on your ending day
               </p>
 
-              <div className={`grid gap-2 ${visitCount > 3 ? "grid-cols-2 sm:grid-cols-3" : "grid-cols-2 sm:grid-cols-3"}`}>
+              <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
                 {sortedVisits.map((visit, index) => (
                   <button
                     key={`end-${visit.index}`}
@@ -848,8 +910,8 @@ export default function Home() {
               startDate === endDate &&
               firstVisit > lastVisit && (
                 <p className="text-sm font-semibold text-red-600">
-                  The last visit must be at or after the first visit
-                  when booking a single day.
+                  The last visit must be at or after the first
+                  visit when booking a single day.
                 </p>
               )}
           </section>
@@ -864,10 +926,13 @@ export default function Home() {
             />
           </label>
 
-          {/* Total */}
+          {/* Total Calculator */}
           <section className="rounded-2xl border border-[#128ced]/20 bg-[#f5f9ff] p-5">
             <div className="flex items-center justify-between gap-3">
-              <span className="text-xl font-black">Total:</span>
+              <span className="text-xl font-black">
+                Total:
+              </span>
+
               <span className="text-3xl font-black text-[#128ced]">
                 ${total.toLocaleString("en-US")}
               </span>
@@ -876,16 +941,23 @@ export default function Home() {
             {petCount > 0 && selectionValid ? (
               <div className="mt-3 space-y-1 text-sm text-gray-600">
                 <p>
-                  {SERVICES.find((item) => item.id === service)?.title}
+                  {
+                    SERVICES.find((item) => item.id === service)
+                      ?.title
+                  }
                 </p>
+
                 <p>
                   {petCount} {petCount === 1 ? "pet" : "pets"}
                 </p>
+
                 <p>
                   {dayCount} {dayCount === 1 ? "day" : "days"}
                   {" • "}
-                  {totalVisits} {totalVisits === 1 ? "visit" : "visits"}
+                  {totalVisits}{" "}
+                  {totalVisits === 1 ? "visit" : "visits"}
                 </p>
+
                 <p className="font-semibold">
                   {service === "walk"
                     ? `${totalVisits} walks × $${rate} per walk`
@@ -907,12 +979,14 @@ export default function Home() {
                 We will review your request, then charge the full
                 amount before your scheduled service.
               </p>
+
               <p>
                 Please provide all food and medications for your pets.
               </p>
             </div>
           </div>
 
+          {/* Submission Message */}
           {submitMessage && (
             <div
               role="status"
@@ -926,6 +1000,7 @@ export default function Home() {
             </div>
           )}
 
+          {/* Submit Button */}
           <button
             type="submit"
             disabled={isSubmitting}
@@ -935,6 +1010,7 @@ export default function Home() {
           </button>
         </form>
 
+        {/* Footer */}
         <footer className="mt-6 border-t border-white/25 pt-8 text-center text-sm text-white/80">
           © 2026 Thank Dog It&apos;s Friday
         </footer>
