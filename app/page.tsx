@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, type FormEvent, type ReactNode } from "react";
+import { useState, type FormEvent } from "react";
 
 type Service = "pet" | "farm" | "walk";
 
@@ -214,7 +214,7 @@ function DateInput({
   );
 }
 
-function BookingForm() {
+export default function Home() {
   const [service, setService] = useState<Service>("pet");
   const [petCount, setPetCount] = useState(0);
   const [walkCount, setWalkCount] = useState(1);
@@ -471,8 +471,84 @@ function BookingForm() {
 
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#128ced] text-white">
-      <div className="mx-auto max-w-2xl px-5 pb-12 pt-10 sm:px-6 sm:pb-16">
-        <div className="mb-7 text-center"><h1 className="text-3xl font-black sm:text-4xl">Request Pet Care</h1><p className="mt-2 text-white/90">Choose a service and tell Ava what your pets need.</p></div>
+      {/* Logo */}
+      <div className="w-full px-20 pt-6 sm:px-40 sm:pt-8">
+        <img
+          src="/thankdogitsfriday.png"
+          alt="Thank Dog It's Friday"
+          className="mx-auto block h-auto w-full max-w-md object-contain"
+        />
+      </div>
+
+      {/* Subtitle */}
+      <div className="px-5 text-center">
+        <h1 className="text-base font-semibold text-white sm:text-lg">
+          Southern Oregon Pet Sitter
+        </h1>
+      </div>
+
+      <div className="mx-auto max-w-2xl px-5 pb-12 pt-6 sm:px-6 sm:pb-16">
+        {/* Cities and Animals - Blue Bubble */}
+        <section className="w-full rounded-[2rem] border border-white/20 bg-white/15 px-4 py-3 text-center text-white shadow-sm sm:px-10">
+          <p className="text-sm font-bold leading-6 sm:text-base">
+            Dogs • Cats • Horses • Goats • Fish
+          </p>
+
+          <p className="mt-1 text-[11px] font-medium leading-5 sm:text-xs">
+            Grants Pass • Central Point • Medford • White City • Eagle Point
+          </p>
+        </section>
+
+        {/* Meet the Owner */}
+        <section className="mt-6 rounded-[2rem] border border-white/20 bg-white/15 px-6 py-10 text-center shadow-sm sm:px-10 sm:py-12">
+          <h2 className="text-3xl font-black tracking-tight sm:text-4xl">
+            Meet the Owner
+          </h2>
+
+          <h3 className="mt-5 text-xl font-bold sm:text-2xl">
+            Hi, I&apos;m Ava!
+          </h3>
+
+          <p className="mt-5 text-base leading-8 text-white/95 sm:text-lg">
+            I&apos;ve called the Rogue Valley home since 2018,
+            and caring for animals has always been a huge part
+            of my life. From dogs and cats to horses and farm
+            animals, I love getting to know each animal&apos;s
+            unique personality.
+          </p>
+
+          <p className="mt-4 text-base leading-8 text-white/95 sm:text-lg">
+            I spent four years working at R&amp;R Pet Resort in
+            Phoenix, Oregon, where I gained hands-on experience
+            caring for dogs and cats, administering medications,
+            following feeding routines, and making sure every
+            animal was safe, happy, and comfortable.
+          </p>
+
+          <p className="mt-4 text-base leading-8 text-white/95 sm:text-lg">
+            I also volunteered at Roxy Rose Ranch in East Medford,
+            gaining valuable experience working with horses.
+            Alongside my professional experience, I&apos;ve
+            continued providing independent pet sitting and
+            house sitting for local families.
+          </p>
+
+          <p className="mt-4 text-base leading-8 text-white/95 sm:text-lg">
+            Whether your pet is energetic and playful, shy and
+            nervous, or a senior who needs a little extra attention,
+            my goal is to give them the same patience, affection,
+            and care I&apos;d want someone to give my own.
+          </p>
+
+          <p className="mt-7 text-lg font-black leading-8 sm:text-xl">
+            Because your dog deserves a good Friday, every day
+          </p>
+
+          <p className="mt-1 text-lg font-bold sm:text-xl">
+            — and you do too! 🐾
+          </p>
+        </section>
+
         {/* Service Selection */}
         <section className="mt-6 rounded-[2rem] border border-white/20 bg-white p-5 text-[#1f2a24] shadow-xl sm:p-8">
           <h2 className="mb-5 text-center text-2xl font-black text-[#128ced]">
@@ -934,85 +1010,11 @@ function BookingForm() {
           </button>
         </form>
 
+        {/* Footer */}
+        <footer className="mt-6 border-t border-white/25 pt-8 text-center text-sm text-white/80">
+          © 2026 Thank Dog It&apos;s Friday
+        </footer>
       </div>
-    </main>
-  );
-}
-
-
-type Section = "home" | "services" | "gallery" | "faq" | "about" | "how" | "reviews" | "contact" | "booking";
-const navigation: { id: Section; label: string }[] = [
-  { id: "home", label: "Home" },
-  { id: "services", label: "Services & Pricing" },
-  { id: "gallery", label: "Gallery" },
-  { id: "faq", label: "FAQ" },
-  { id: "about", label: "About" },
-  { id: "how", label: "How It Works / What to Expect" },
-  { id: "reviews", label: "Reviews / Testimonials" },
-  { id: "contact", label: "Contact Info" },
-];
-const faqItems = [
-  ["What animals do you care for?", "Dogs, cats, horses, goats, and fish. Share any special care needs in your request."],
-  ["Where do you offer services?", "Grants Pass, Central Point, Medford, White City, and Eagle Point."],
-  ["How many visits are included?", "Pet sitting includes three daily visits, farm sitting includes two, and dog walks can be booked one to five times daily."],
-  ["When do I pay?", "We'll review your request first. Full payment is collected before the scheduled service."],
-  ["Do I provide food and medications?", "Yes, please provide the food and medications your pets need."],
-];
-export default function Home() {
-  const [page, setPage] = useState<Section>("home");
-  const [menuOpen, setMenuOpen] = useState(false);
-  const navigate = (next: Section) => {
-    setPage(next);
-    setMenuOpen(false);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-  const action = (label = "Request Pet Care") => (
-    <button type="button" onClick={() => navigate("booking")} className="rounded-full bg-white px-7 py-3 font-extrabold text-[#128ced] shadow-md hover:bg-blue-50">{label}</button>
-  );
-  const section = (title: string, children: React.ReactNode) => (
-    <section className="mx-auto w-full max-w-5xl px-5 py-12 sm:py-16">
-      <h1 className="mb-8 text-center text-3xl font-black sm:text-4xl">{title}</h1>
-      {children}
-    </section>
-  );
-  return (
-    <main className="min-h-screen bg-[#128ced] text-white">
-      <header className="sticky top-0 z-50 border-b border-white/20 bg-[#128ced] shadow-sm">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
-          <button type="button" onClick={() => navigate("home")} className="text-left text-base font-black sm:text-xl">Thank Dog It&apos;s Friday 🐾</button>
-          <div className="flex items-center gap-2">
-            <button type="button" onClick={() => navigate("booking")} className="rounded-full bg-white px-4 py-2 text-sm font-bold text-[#128ced]">Book Now</button>
-            <div className="relative">
-              <button type="button" aria-expanded={menuOpen} onClick={() => setMenuOpen(!menuOpen)} className="rounded-xl border border-white/40 px-4 py-2 text-sm font-bold">Menu {menuOpen ? "×" : "☰"}</button>
-              {menuOpen && <nav aria-label="Site navigation" className="absolute right-0 top-full mt-2 w-[min(85vw,320px)] overflow-hidden rounded-2xl bg-white py-2 text-[#1f2a24] shadow-2xl">
-                {navigation.map(item => <button key={item.id} type="button" onClick={() => navigate(item.id)} className={`block w-full px-5 py-3 text-left font-semibold hover:bg-blue-50 ${page === item.id ? "text-[#128ced]" : ""}`}>{item.label}</button>)}
-                <button type="button" onClick={() => navigate("booking")} className="block w-full border-t border-blue-100 px-5 py-3 text-left font-black text-[#128ced]">Booking</button>
-              </nav>}
-            </div>
-          </div>
-        </div>
-      </header>
-      {page === "home" && <>
-        <section className="mx-auto flex max-w-4xl flex-col items-center px-5 pb-16 pt-10 text-center sm:pt-16">
-          <img src="/thankdogitsfriday.png" alt="Thank Dog It's Friday" className="mb-7 w-full max-w-md object-contain" />
-          <h1 className="text-2xl font-black leading-snug sm:text-4xl">Because your dog deserves a good Friday, every day</h1>
-          <p className="mt-2 text-xl font-bold sm:text-2xl">— and you do too! 🐾</p>
-          <p className="mt-6 max-w-xl text-lg leading-8">Dependable, attentive pet care across Southern Oregon for dogs, cats, horses, goats, and fish.</p>
-          <p className="mt-4 text-sm font-semibold text-white/85">Grants Pass • Central Point • Medford • White City • Eagle Point</p>
-          <div className="mt-8 flex flex-wrap justify-center gap-3">{action()}<button type="button" onClick={() => navigate("services")} className="rounded-full border-2 border-white px-7 py-3 font-bold">Services & Pricing</button></div>
-        </section>
-        <div className="bg-white text-[#1f2a24]"><div className="mx-auto max-w-5xl px-5 py-14 text-center"><h2 className="text-3xl font-black text-[#128ced]">Care you can count on</h2><div className="mt-8 grid gap-4 sm:grid-cols-3">{SERVICES.map(item => <button key={item.id} type="button" onClick={() => navigate("services")} className="rounded-2xl border border-blue-100 bg-[#f5f9ff] p-7 text-left"><h3 className="text-xl font-black">{item.title}</h3><p className="mt-2 text-2xl font-black text-[#128ced]">{item.price}</p><p className="mt-3 text-sm">{item.description}</p></button>)}</div></div></div>
-        <section className="mx-auto max-w-3xl px-5 py-14 text-center"><h2 className="text-3xl font-black">Meet Ava</h2><p className="mt-5 text-lg leading-8">I&apos;ve called the Rogue Valley home since 2018, and caring for animals has always been a huge part of my life. From dogs and cats to horses and farm animals, I love getting to know each animal&apos;s unique personality.</p><button type="button" onClick={() => navigate("about")} className="mt-7 rounded-full border-2 border-white px-6 py-3 font-bold">More About Ava</button></section>
-      </>}
-      {page === "services" && section("Services & Pricing", <><div className="grid gap-5 md:grid-cols-3">{SERVICES.map(item => <article key={item.id} className="rounded-3xl bg-white p-7 text-[#1f2a24] shadow-lg"><h2 className="text-2xl font-black text-[#128ced]">{item.title}</h2><p className="mt-3 text-2xl font-black">{item.price}</p><p className="mt-4">{item.description}</p><p className="mt-2 text-sm text-gray-600">{item.detail}</p><button type="button" onClick={() => navigate("booking")} className="mt-7 rounded-xl bg-[#128ced] px-5 py-3 font-bold text-white">Request This Service</button></article>)}</div><p className="mt-8 text-center text-sm">Your total is calculated in the booking form before submitting a request.</p></>)}
-      {page === "gallery" && section("Gallery", <div className="rounded-3xl border border-white/30 bg-white/10 p-10 text-center"><p>Photos of Ava&apos;s animal friends and pet-sitting adventures will be added here.</p></div>)}
-      {page === "faq" && section("Frequently Asked Questions", <div className="mx-auto max-w-3xl space-y-3">{faqItems.map(([q,a]) => <details key={q} className="rounded-2xl bg-white p-5 text-[#1f2a24]"><summary className="cursor-pointer font-bold">{q}</summary><p className="mt-3 leading-7">{a}</p></details>)}</div>)}
-      {page === "about" && section("About Ava", <div className="mx-auto max-w-3xl space-y-5 rounded-3xl bg-white p-8 text-lg leading-8 text-[#1f2a24]"><p>Hi, I&apos;m Ava! I&apos;ve called the Rogue Valley home since 2018, and caring for animals has always been a huge part of my life. From dogs and cats to horses and farm animals, I love getting to know each animal&apos;s unique personality.</p><p>Whether your pet is energetic and playful, shy and nervous, or a senior who needs a little extra attention, my goal is to give them the same patience, affection, and care I&apos;d want someone to give my own.</p></div>)}
-      {page === "how" && section("How It Works / What to Expect", <div className="mx-auto grid max-w-4xl gap-4 sm:grid-cols-3">{[["1", "Choose a service", "Select pet sitting, farm sitting, or dog walks."],["2", "Send your request", "Tell us about your pets, preferred times, and dates."],["3", "Confirm the details", "Ava reviews your request and confirms arrangements before payment."]].map(([n,t,d]) => <article key={n} className="rounded-3xl bg-white p-7 text-[#1f2a24]"><p className="text-3xl font-black text-[#128ced]">{n}</p><h2 className="mt-3 text-xl font-black">{t}</h2><p className="mt-3 leading-7">{d}</p></article>)}</div>)}
-      {page === "reviews" && section("Reviews / Testimonials", <div className="rounded-3xl border border-white/30 bg-white/10 p-10 text-center">Customer testimonials will appear here once Ava has permission to share them.</div>)}
-      {page === "contact" && section("Contact Info", <div className="mx-auto max-w-2xl rounded-3xl bg-white p-8 text-center text-[#1f2a24]"><p className="text-lg">Serving Grants Pass, Central Point, Medford, White City, and Eagle Point.</p><p className="mt-4 text-gray-600">Contact details can be added here when confirmed.</p><div className="mt-7"> <button type="button" onClick={() => navigate("booking")} className="rounded-xl bg-[#128ced] px-6 py-3 font-bold text-white">Send a Booking Request</button></div></div>)}
-      {page === "booking" && <BookingForm />}
-      <footer className="border-t border-white/25 px-5 py-7 text-center text-sm text-white/80">© 2026 Thank Dog It&apos;s Friday</footer>
     </main>
   );
 }
