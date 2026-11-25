@@ -1,32 +1,22 @@
-
-"use client";
-
-import { useState, type FormEvent } from "react";
-
-type Service = "pet" | "farm" | "walk";
-
-type PetDetails = {
-  allergies: string;
-  medications: string;
-};
+import Link from "next/link";
 
 const SERVICES = [
   {
-    id: "pet" as Service,
+    id: "pet", href: "/pet-sitting",
     title: "Pet Sitting",
     price: "$100 / day",
     description: "Three Visits Daily",
     detail: "+ $5 per additional pet per day",
   },
   {
-    id: "farm" as Service,
+    id: "farm", href: "/farm-sitting",
     title: "Farm Sitting",
     price: "$90 / day",
     description: "Two Visits Daily",
     detail: "Custom morning and night visit times",
   },
   {
-    id: "walk" as Service,
+    id: "walk", href: "/dog-walks",
     title: "Dog Walks",
     price: "$25 / walk",
     description: "Choose 1–5 walks per day",
@@ -34,447 +24,24 @@ const SERVICES = [
   },
 ];
 
-const emptyPet = (): PetDetails => ({
-  allergies: "",
-  medications: "",
-});
-
-const timeOptions = Array.from({ length: 96 }, (_, index) => {
-  const hour = Math.floor(index / 4);
-  const minute = (index % 4) * 15;
-  const value = `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`;
-  const hour12 = hour % 12 || 12;
-  const label = `${hour12}:${String(minute).padStart(2, "0")} ${hour < 12 ? "AM" : "PM"}`;
-  return { value, label };
-});
-
-function formatTime(value: string) {
-  return timeOptions.find((option) => option.value === value)?.label || value;
-}
-
-function dateNumber(value: string) {
-  return Date.parse(`${value}T00:00:00Z`);
-}
-
-function getToday() {
-  const today = new Date();
-  return [
-    today.getFullYear(),
-    String(today.getMonth() + 1).padStart(2, "0"),
-    String(today.getDate()).padStart(2, "0"),
-  ].join("-");
-}
-
-const inputClass =
-  "box-border block w-full min-w-0 max-w-full rounded-xl border border-black/10 bg-[#f5f9ff] px-4 py-3 font-normal text-[#1f2a24] outline-none transition placeholder:text-gray-400 focus:border-[#128ced] focus:ring-2 focus:ring-[#128ced]/20";
-
-const choiceClass = (selected: boolean) =>
-  `flex min-h-12 cursor-pointer touch-manipulation items-center justify-center rounded-xl border-2 px-3 py-3 text-center font-bold transition ${
-    selected
-      ? "border-[#128ced] bg-[#128ced] text-white shadow-md"
-      : "border-[#128ced]/20 bg-[#f5f9ff] text-[#128ced] hover:border-[#128ced]"
-  }`;
-
-function Input({
-  name,
-  label,
-  placeholder,
-  type = "text",
-  required = false,
-}: {
-  name: string;
-  label: string;
-  placeholder: string;
-  type?: string;
-  required?: boolean;
-}) {
-  return (
-    <label className="grid min-w-0 gap-2 text-[15px] font-bold sm:text-base">
-      {label}
-      <input
-        name={name}
-        type={type}
-        placeholder={placeholder}
-        required={required}
-        className={inputClass}
-      />
-    </label>
-  );
-}
-
-function YesNoQuestion({
-  name,
-  label,
-  value,
-  onChange,
-}: {
-  name: string;
-  label: string;
-  value: string;
-  onChange: (value: string) => void;
-}) {
-  return (
-    <fieldset className="grid min-w-0 gap-3">
-      <legend className="mb-3 text-[15px] font-bold sm:text-base">
-        {label}
-      </legend>
-
-      <div className="grid grid-cols-2 gap-3">
-        {["yes", "no"].map((option) => (
-          <label
-            key={option}
-            className={choiceClass(value === option)}
-          >
-            <input
-              type="radio"
-              name={name}
-              value={option}
-              checked={value === option}
-              onChange={() => onChange(option)}
-              required
-              className="sr-only"
-            />
-            {option === "yes" ? "Yes" : "No"}
-          </label>
-        ))}
-      </div>
-    </fieldset>
-  );
-}
-
-function TimePicker({
-  label,
-  value,
-  onChange,
-}: {
-  label: string;
-  value: string;
-  onChange: (value: string) => void;
-}) {
-  return (
-    <label className="grid min-w-0 gap-2 text-sm font-bold">
-      {label}
-      <select
-        value={value}
-        onChange={(event) => onChange(event.target.value)}
-        required
-        className={inputClass}
-      >
-        <option value="">Select a time</option>
-        {timeOptions.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </select>
-    </label>
-  );
-}
-
-function DateInput({
-  id,
-  label,
-  value,
-  min,
-  onChange,
-}: {
-  id: string;
-  label: string;
-  value: string;
-  min: string;
-  onChange: (value: string) => void;
-}) {
-  return (
-    <div className="grid w-full min-w-0 max-w-full gap-3">
-      <label htmlFor={id} className="text-sm font-semibold">
-        {label}
-      </label>
-
-      <div className="w-full min-w-0 max-w-full overflow-hidden rounded-xl border border-black/10 bg-[#f5f9ff]">
-        <input
-          id={id}
-          name={id}
-          type="date"
-          min={min}
-          value={value}
-          onChange={(event) => onChange(event.target.value)}
-          required
-          style={{
-            display: "block",
-            width: "100%",
-            minWidth: 0,
-            maxWidth: "100%",
-            boxSizing: "border-box",
-            WebkitAppearance: "none",
-          }}
-          className="border-0 bg-transparent px-3 py-3 font-normal text-[#1f2a24] outline-none focus:ring-2 focus:ring-inset focus:ring-[#128ced]/20"
-        />
-      </div>
-    </div>
-  );
-}
-
+// Add actual photo paths, approved reviews and business contact details here.
+const gallery: { src: string; alt: string }[] = [];
+const reviews: { quote: string; name: string }[] = [];
+const contact = { email: "", phone: "" };
+const faqs = [
+  ["What areas do you serve?", "Grants Pass, Central Point, Medford, White City and Eagle Point."],
+  ["What animals do you care for?", "Dogs, cats, horses, goats and fish."],
+  ["Can I choose visit times?", "Yes. Select your preferred times in the booking form."],
+  ["When is payment due?", "After your request is reviewed, the full amount is due before your scheduled service."],
+  ["What should I provide?", "Please provide all food and medications for your pets."],
+];
 export default function Home() {
-  const [service, setService] = useState<Service>("pet");
-  const [petCount, setPetCount] = useState(0);
-  const [walkCount, setWalkCount] = useState(1);
-
-  const [visitTimes, setVisitTimes] = useState<string[]>([
-    "08:00",
-    "13:00",
-    "19:00",
-  ]);
-
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const [startVisit, setStartVisit] = useState(0);
-  const [endVisit, setEndVisit] = useState(2);
-
-  const [phone, setPhone] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitMessage, setSubmitMessage] = useState("");
-  const [submitSuccess, setSubmitSuccess] = useState(false);
-
-  const [petDetails, setPetDetails] = useState<PetDetails[]>(
-    Array.from({ length: 10 }, emptyPet)
-  );
-
-  const todayString = getToday();
-
-  const visitCount =
-    service === "pet" ? 3 : service === "farm" ? 2 : walkCount;
-
-  const activeTimes = visitTimes.slice(0, visitCount);
-
-  const sortedVisits = activeTimes
-    .map((time, index) => ({
-      time,
-      index,
-      label: formatTime(time),
-    }))
-    .sort((a, b) => a.time.localeCompare(b.time));
-
-  const datesValid =
-    Boolean(startDate && endDate) &&
-    endDate >= startDate &&
-    startDate >= todayString;
-
-  const dayCount = datesValid
-    ? Math.round(
-        (dateNumber(endDate) - dateNumber(startDate)) / 86400000
-      ) + 1
-    : 0;
-
-  const firstVisit = Math.min(startVisit, visitCount - 1);
-  const lastVisit = Math.min(endVisit, visitCount - 1);
-
-  const timesComplete =
-    activeTimes.length === visitCount &&
-    activeTimes.every(Boolean) &&
-    new Set(activeTimes).size === visitCount;
-
-  const selectedStartTime = sortedVisits[firstVisit]?.time || "";
-  const selectedEndTime = sortedVisits[lastVisit]?.time || "";
-
-  const selectionValid =
-    datesValid &&
-    timesComplete &&
-    (startDate !== endDate || firstVisit <= lastVisit);
-
-  const totalVisits = selectionValid
-    ? (dayCount - 1) * visitCount + lastVisit - firstVisit + 1
-    : 0;
-
-  const rate =
-    service === "farm"
-      ? 90
-      : service === "pet"
-        ? 100 + Math.max(0, petCount - 1) * 5
-        : 25 + Math.max(0, petCount - 1) * 5;
-
-  const total =
-    petCount > 0 && selectionValid
-      ? service === "walk"
-        ? totalVisits * rate
-        : dayCount * rate
-      : 0;
-
-  const updatePet = (
-    index: number,
-    field: keyof PetDetails,
-    value: string
-  ) => {
-    setPetDetails((previous) =>
-      previous.map((pet, i) =>
-        i === index ? { ...pet, [field]: value } : pet
-      )
-    );
-  };
-
-  const formatPhoneNumber = (value: string) => {
-    const digits = value.replace(/\D/g, "").slice(0, 10);
-
-    if (!digits.length) return "";
-    if (digits.length < 4) return `(${digits}`;
-
-    if (digits.length < 7) {
-      return `(${digits.slice(0, 3)}) ${digits.slice(3)}`;
-    }
-
-    return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
-  };
-
-  const changeService = (next: Service) => {
-    setService(next);
-    setStartVisit(0);
-
-    if (next !== "farm") {
-      setPetCount((previous) => Math.min(previous, 5));
-    }
-
-    if (next === "pet") {
-      setVisitTimes(["08:00", "13:00", "19:00"]);
-      setEndVisit(2);
-    } else if (next === "farm") {
-      setVisitTimes(["08:00", "19:00"]);
-      setEndVisit(1);
-    } else {
-      setWalkCount(1);
-      setVisitTimes(["09:00"]);
-      setEndVisit(0);
-    }
-  };
-
-  const changeWalkCount = (count: number) => {
-    setWalkCount(count);
-    setVisitTimes((previous) =>
-      Array.from({ length: count }, (_, i) => previous[i] || "")
-    );
-    setStartVisit(0);
-    setEndVisit(count - 1);
-  };
-
-  const updateTime = (index: number, value: string) => {
-    setVisitTimes((previous) =>
-      previous.map((time, i) => (i === index ? value : time))
-    );
-  };
-
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    if (isSubmitting) return;
-
-    if (petCount < 1) {
-      setSubmitSuccess(false);
-      setSubmitMessage("Please select how many pets you have.");
-      return;
-    }
-
-    if (!selectionValid || totalVisits < 1) {
-      setSubmitSuccess(false);
-      setSubmitMessage(
-        "Please select valid dates and unique visit times."
-      );
-      return;
-    }
-
-    setIsSubmitting(true);
-    setSubmitMessage("");
-    setSubmitSuccess(false);
-
-    const form = event.currentTarget;
-    const formData = new FormData(form);
-
-    const get = (name: string) =>
-      String(formData.get(name) ?? "").trim();
-
-    const pets = Array.from({ length: petCount }, (_, i) => {
-      const n = i + 1;
-
-      return {
-        name: get(`pet${n}Name`),
-        breed: get(`pet${n}Breed`),
-        allergies: get(`pet${n}Allergies`),
-        allergyDetails: get(`pet${n}AllergyDetails`),
-        medications: get(`pet${n}Medications`),
-        medicationDetails: get(`pet${n}MedicationDetails`),
-        personality: get(`pet${n}Personality`),
-      };
-    });
-
-    const booking = {
-      fullName: get("fullName"),
-      phone: get("phone"),
-      email: get("email"),
-      streetAddress: get("streetAddress"),
-      city: get("city"),
-      zipCode: get("zipCode"),
-      service,
-      serviceName:
-        SERVICES.find((item) => item.id === service)?.title || "",
-      petCount,
-      pets,
-      walkCount: service === "walk" ? walkCount : null,
-      visitTimes: sortedVisits.map((visit) => visit.label),
-      startDate,
-      startTime: formatTime(selectedStartTime),
-      startPeriod: formatTime(selectedStartTime),
-      endDate,
-      endTime: formatTime(selectedEndTime),
-      endPeriod: formatTime(selectedEndTime),
-      totalVisits,
-      dayCount,
-      rate,
-      total,
-      additionalInfo: get("additionalInfo"),
-    };
-
-    try {
-      const response = await fetch("/api/booking", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(booking),
-      });
-
-      const result = await response.json();
-
-      if (!response.ok || !result.success) {
-        throw new Error(result.error || "Submission failed.");
-      }
-
-      setSubmitSuccess(true);
-      setSubmitMessage(
-        "Request sent successfully! We'll contact you shortly."
-      );
-
-      form.reset();
-      setPetCount(0);
-      setPetDetails(Array.from({ length: 10 }, emptyPet));
-      setPhone("");
-      setStartDate("");
-      setEndDate("");
-      changeService("pet");
-    } catch (error) {
-      setSubmitSuccess(false);
-      setSubmitMessage(
-        error instanceof Error
-          ? error.message
-          : "Something went wrong. Please try again."
-      );
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#128ced] text-white">
       {/* Logo */}
       <div className="w-full px-20 pt-6 sm:px-40 sm:pt-8">
         <img
-          src="/thankdogitsfriday.png"
+          src="/thankdogitsfriday.webp"
           alt="Thank Dog It's Friday"
           className="mx-auto block h-auto w-full max-w-md object-contain"
         />
@@ -518,22 +85,6 @@ export default function Home() {
           </p>
 
           <p className="mt-4 text-base leading-8 text-white/95 sm:text-lg">
-            I spent four years working at R&amp;R Pet Resort in
-            Phoenix, Oregon, where I gained hands-on experience
-            caring for dogs and cats, administering medications,
-            following feeding routines, and making sure every
-            animal was safe, happy, and comfortable.
-          </p>
-
-          <p className="mt-4 text-base leading-8 text-white/95 sm:text-lg">
-            I also volunteered at Roxy Rose Ranch in East Medford,
-            gaining valuable experience working with horses.
-            Alongside my professional experience, I&apos;ve
-            continued providing independent pet sitting and
-            house sitting for local families.
-          </p>
-
-          <p className="mt-4 text-base leading-8 text-white/95 sm:text-lg">
             Whether your pet is energetic and playful, shy and
             nervous, or a senior who needs a little extra attention,
             my goal is to give them the same patience, affection,
@@ -549,467 +100,48 @@ export default function Home() {
           </p>
         </section>
 
-        {/* Service Selection */}
-        <section className="mt-6 rounded-[2rem] border border-white/20 bg-white p-5 text-[#1f2a24] shadow-xl sm:p-8">
-          <h2 className="mb-5 text-center text-2xl font-black text-[#128ced]">
-            Choose Your Service
-          </h2>
 
+        <section id="services" className="mt-6 rounded-[2rem] bg-white p-5 text-[#1f2a24] shadow-xl sm:p-8">
+          <h2 className="mb-5 text-center text-2xl font-black text-[#128ced]">Services and Pricing</h2>
           <div className="grid gap-3">
-            {SERVICES.map((item) => (
-              <button
-                key={item.id}
-                type="button"
-                aria-pressed={service === item.id}
-                onClick={() => changeService(item.id)}
-                className={`w-full rounded-2xl border-2 p-5 text-left transition ${
-                  service === item.id
-                    ? "border-[#128ced] bg-[#128ced] text-white shadow-md"
-                    : "border-[#128ced]/20 bg-[#f5f9ff] text-[#1f2a24] hover:border-[#128ced]"
-                }`}
-              >
-                <div className="flex flex-wrap items-center justify-between gap-2">
-                  <span className="text-xl font-black">
-                    {item.title}
-                  </span>
-
-                  <span className="text-xl font-black">
-                    {item.price}
-                  </span>
-                </div>
-
-                <p className="mt-2 text-sm">
-                  {item.description}
-                </p>
-
-                <p className="mt-1 text-xs font-semibold opacity-80">
-                  {item.detail}
-                </p>
-              </button>
+            {SERVICES.map(item => (
+              <Link key={item.id} href={item.href} className="block rounded-2xl border-2 border-[#128ced]/20 bg-[#f5f9ff] p-5 transition hover:border-[#128ced]">
+                <div className="flex flex-wrap justify-between gap-2 text-xl font-black text-[#128ced]"><span>{item.title}</span><span>{item.price}</span></div>
+                <p className="mt-2 text-sm">{item.description}</p>
+                <p className="mt-1 text-xs font-semibold">{item.detail}</p>
+                <p className="mt-4 font-bold text-[#128ced]">Request Booking →</p>
+              </Link>
             ))}
           </div>
         </section>
-
-        {/* Booking Form */}
-        <form
-          onSubmit={handleSubmit}
-          className="mt-6 grid min-w-0 gap-6 rounded-[2rem] border border-white/20 bg-white p-5 text-[#1f2a24] shadow-xl sm:p-10"
-        >
-          <h2 className="text-center text-2xl font-black text-[#128ced]">
-            Request {SERVICES.find((item) => item.id === service)?.title}
-          </h2>
-
-          <Input
-            name="fullName"
-            label="What is your full name?"
-            placeholder="First and last name"
-            required
-          />
-
-          {/* Phone */}
-          <label className="grid min-w-0 gap-2 text-[15px] font-bold sm:text-base">
-            What is your phone number?
-            <input
-              name="phone"
-              type="tel"
-              inputMode="numeric"
-              autoComplete="tel-national"
-              placeholder="(555) 555-5555"
-              value={phone}
-              onChange={(event) =>
-                setPhone(formatPhoneNumber(event.target.value))
-              }
-              required
-              pattern="\([0-9]{3}\) [0-9]{3}-[0-9]{4}"
-              maxLength={14}
-              className={inputClass}
-            />
-          </label>
-
-          <Input
-            name="email"
-            label="What is your email?"
-            placeholder="you@example.com"
-            type="email"
-            required
-          />
-
-          <Input
-            name="streetAddress"
-            label="What is your street address?"
-            placeholder="123 Main Street"
-            required
-          />
-
-          <Input
-            name="city"
-            label="What city do you live in?"
-            placeholder="Medford"
-            required
-          />
-
-          {/* ZIP Code */}
-          <label className="grid min-w-0 gap-2 text-[15px] font-bold sm:text-base">
-            What is your ZIP code?
-            <input
-              name="zipCode"
-              type="text"
-              inputMode="numeric"
-              autoComplete="postal-code"
-              placeholder="97501"
-              maxLength={5}
-              pattern="[0-9]{5}"
-              title="Please enter a 5-digit ZIP code"
-              required
-              className={inputClass}
-            />
-          </label>
-
-          {/* Number of Pets */}
-          <fieldset className="grid min-w-0 gap-3">
-            <legend className="mb-3 text-[15px] font-bold sm:text-base">
-              How many pets do you have?
-            </legend>
-
-            <div className="grid grid-cols-5 gap-2 sm:gap-3">
-              {Array.from(
-                { length: service === "farm" ? 10 : 5 },
-                (_, index) => index + 1
-              ).map((count) => (
-                <button
-                  key={count}
-                  type="button"
-                  aria-pressed={petCount === count}
-                  onMouseDown={(event) => event.preventDefault()}
-                  onClick={() => setPetCount(count)}
-                  className={`${choiceClass(petCount === count)} aspect-square text-lg font-black`}
-                >
-                  {count}
-                </button>
-              ))}
-            </div>
-          </fieldset>
-
-          {/* Walk Count */}
-          {service === "walk" && (
-            <fieldset className="grid min-w-0 gap-3">
-              <legend className="mb-3 text-[15px] font-bold sm:text-base">
-                How many walks per day?
-              </legend>
-
-              <div className="grid grid-cols-5 gap-2 sm:gap-3">
-                {[1, 2, 3, 4, 5].map((count) => (
-                  <button
-                    key={count}
-                    type="button"
-                    aria-pressed={walkCount === count}
-                    onMouseDown={(event) => event.preventDefault()}
-                    onClick={() => changeWalkCount(count)}
-                    className={`${choiceClass(walkCount === count)} aspect-square text-lg font-black`}
-                  >
-                    {count}
-                  </button>
-                ))}
-              </div>
-            </fieldset>
-          )}
-
-          {/* Dynamic Pet Questions */}
-          {Array.from({ length: petCount }, (_, index) => (
-            <section
-              key={index}
-              className="grid min-w-0 gap-5 rounded-2xl border border-[#128ced]/20 bg-[#f5f9ff] p-4 sm:p-6"
-            >
-              <h2 className="text-xl font-black text-[#128ced]">
-                Pet #{index + 1}
-              </h2>
-
-              <Input
-                name={`pet${index + 1}Name`}
-                label="Name?"
-                placeholder="Pet's name"
-                required
-              />
-
-              <Input
-                name={`pet${index + 1}Breed`}
-                label="Breed?"
-                placeholder="Breed or type of pet"
-                required
-              />
-
-              {/* Allergies */}
-              <YesNoQuestion
-                name={`pet${index + 1}Allergies`}
-                label="Does your pet have any allergies?"
-                value={petDetails[index].allergies}
-                onChange={(value) =>
-                  updatePet(index, "allergies", value)
-                }
-              />
-
-              {petDetails[index].allergies === "yes" && (
-                <label className="grid min-w-0 gap-2 text-[15px] font-bold sm:text-base">
-                  What allergies does your pet have?
-                  <textarea
-                    name={`pet${index + 1}AllergyDetails`}
-                    required
-                    className={`${inputClass} min-h-24 resize-y bg-white`}
-                    placeholder="List allergies and any special precautions..."
-                  />
-                </label>
-              )}
-
-              {/* Medications */}
-              <YesNoQuestion
-                name={`pet${index + 1}Medications`}
-                label="Does your pet take any medications?"
-                value={petDetails[index].medications}
-                onChange={(value) =>
-                  updatePet(index, "medications", value)
-                }
-              />
-
-              {petDetails[index].medications === "yes" && (
-                <label className="grid min-w-0 gap-2 text-[15px] font-bold sm:text-base">
-                  What medications does your pet take?
-                  <textarea
-                    name={`pet${index + 1}MedicationDetails`}
-                    required
-                    className={`${inputClass} min-h-24 resize-y bg-white`}
-                    placeholder="Medication names, dosage, schedule, and instructions..."
-                  />
-                </label>
-              )}
-
-              {/* Personality */}
-              <label className="grid min-w-0 gap-2 text-[15px] font-bold sm:text-base">
-                Personality?
-                <textarea
-                  name={`pet${index + 1}Personality`}
-                  className={`${inputClass} min-h-28 resize-y`}
-                  placeholder="Friendly, energetic, shy, playful, etc."
-                />
-              </label>
-            </section>
-          ))}
-
-          {/* Custom Visit Times - Below Pet Descriptions */}
-          <section className="grid min-w-0 gap-4">
-            <div>
-              <h3 className="text-[15px] font-bold sm:text-base">
-                What times work best for your{" "}
-                {service === "walk" ? "walks" : "visits"}?
-              </h3>
-
-              <p className="mt-1 text-sm text-gray-500">
-                Select your preferred daily times. These will also
-                appear in your booking date selections.
-              </p>
-            </div>
-
-            <div className="grid gap-3">
-              {Array.from({ length: visitCount }, (_, index) => (
-                <TimePicker
-                  key={`${service}-${index}`}
-                  label={
-                    service === "pet"
-                      ? [
-                          "Morning Visit",
-                          "Afternoon Visit",
-                          "Night Visit",
-                        ][index]
-                      : service === "farm"
-                        ? ["Morning Visit", "Night Visit"][index]
-                        : `Walk ${index + 1}`
-                  }
-                  value={visitTimes[index] || ""}
-                  onChange={(value) => updateTime(index, value)}
-                />
-              ))}
-            </div>
-
-            {!timesComplete && (
-              <p className="text-sm font-medium text-amber-700">
-                Please select a different time for each visit.
-              </p>
-            )}
-          </section>
-
-          {/* Booking Dates */}
-          <section className="grid w-full min-w-0 max-w-full gap-5">
-            <h2 className="text-[15px] font-bold sm:text-base">
-              When do you need{" "}
-              {service === "walk" ? "dog walks" : "a sitter"}?
-            </h2>
-
-            {/* Starting Date */}
-            <div className="grid w-full min-w-0 max-w-full gap-3">
-              <DateInput
-                id="startDate"
-                label="Starting"
-                value={startDate}
-                min={todayString}
-                onChange={(next) => {
-                  setStartDate(next);
-                  if (endDate && endDate < next) {
-                    setEndDate("");
-                  }
-                }}
-              />
-
-              <p className="text-sm font-semibold">
-                First visit on your starting day
-              </p>
-
-              <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-                {sortedVisits.map((visit, index) => (
-                  <button
-                    key={`start-${visit.index}`}
-                    type="button"
-                    aria-pressed={firstVisit === index}
-                    onClick={() => setStartVisit(index)}
-                    className={choiceClass(firstVisit === index)}
-                  >
-                    {visit.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Ending Date */}
-            <div className="grid w-full min-w-0 max-w-full gap-3">
-              <DateInput
-                id="endDate"
-                label="Ending"
-                value={endDate}
-                min={startDate || todayString}
-                onChange={setEndDate}
-              />
-
-              <p className="text-sm font-semibold">
-                Last visit on your ending day
-              </p>
-
-              <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-                {sortedVisits.map((visit, index) => (
-                  <button
-                    key={`end-${visit.index}`}
-                    type="button"
-                    aria-pressed={lastVisit === index}
-                    onClick={() => setEndVisit(index)}
-                    className={choiceClass(lastVisit === index)}
-                  >
-                    {visit.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {datesValid &&
-              startDate === endDate &&
-              firstVisit > lastVisit && (
-                <p className="text-sm font-semibold text-red-600">
-                  The last visit must be at or after the first
-                  visit when booking a single day.
-                </p>
-              )}
-          </section>
-
-          {/* Additional Information */}
-          <label className="grid min-w-0 gap-2 text-[15px] font-bold sm:text-base">
-            Is there anything else I should know?
-            <textarea
-              name="additionalInfo"
-              className={`${inputClass} min-h-28 resize-y`}
-              placeholder="Feeding schedules, special instructions, or anything else you'd like to share..."
-            />
-          </label>
-
-          {/* Total Calculator */}
-          <section className="rounded-2xl border border-[#128ced]/20 bg-[#f5f9ff] p-5">
-            <div className="flex items-center justify-between gap-3">
-              <span className="text-xl font-black">
-                Total:
-              </span>
-
-              <span className="text-3xl font-black text-[#128ced]">
-                ${total.toLocaleString("en-US")}
-              </span>
-            </div>
-
-            {petCount > 0 && selectionValid ? (
-              <div className="mt-3 space-y-1 text-sm text-gray-600">
-                <p>
-                  {
-                    SERVICES.find((item) => item.id === service)
-                      ?.title
-                  }
-                </p>
-
-                <p>
-                  {petCount} {petCount === 1 ? "pet" : "pets"}
-                </p>
-
-                <p>
-                  {dayCount} {dayCount === 1 ? "day" : "days"}
-                  {" • "}
-                  {totalVisits}{" "}
-                  {totalVisits === 1 ? "visit" : "visits"}
-                </p>
-
-                <p className="font-semibold">
-                  {service === "walk"
-                    ? `${totalVisits} walks × $${rate} per walk`
-                    : `${dayCount} days × $${rate} per day`}
-                </p>
-              </div>
-            ) : (
-              <p className="mt-2 text-sm text-gray-500">
-                Select your pets, visit times, and booking dates
-                to calculate the total.
-              </p>
-            )}
-          </section>
-
-          {/* Booking Information */}
-          <div className="rounded-2xl border border-[#128ced]/20 bg-[#f5f9ff] p-5 text-center">
-            <div className="space-y-3 text-sm leading-6 text-gray-600">
-              <p>
-                We will review your request, then charge the full
-                amount before your scheduled service.
-              </p>
-
-              <p>
-                Please provide all food and medications for your pets.
-              </p>
-            </div>
+        <section className="mt-6 rounded-[2rem] border border-white/20 bg-white/15 p-5 text-center sm:p-8">
+          <h2 className="mb-5 text-2xl font-black">Doggo Gallery</h2>
+          <div className="grid grid-cols-3 gap-3">
+            {gallery.length ? gallery.map(photo => <img key={photo.src} src={photo.src} alt={photo.alt} className="aspect-square w-full rounded-xl object-cover" />) : Array.from({length: 6}, (_, i) => <div key={i} aria-hidden="true" className="grid aspect-square place-items-center rounded-xl bg-white/20 text-3xl">🐾</div>)}
           </div>
-
-          {/* Submission Message */}
-          {submitMessage && (
-            <div
-              role="status"
-              className={`rounded-xl p-4 text-center font-semibold ${
-                submitSuccess
-                  ? "bg-green-100 text-green-800"
-                  : "bg-red-100 text-red-800"
-              }`}
-            >
-              {submitMessage}
-            </div>
-          )}
-
-          {/* Submit Button */}
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="mt-2 rounded-xl bg-[#128ced] px-8 py-4 text-lg font-bold text-white shadow-sm transition hover:bg-[#0875cc] disabled:cursor-not-allowed disabled:opacity-60"
-          >
-            {isSubmitting ? "Sending Request..." : "Send Request"}
-          </button>
-        </form>
-
+          {!gallery.length && <p className="mt-4 text-sm">Pet photos coming soon!</p>}
+        </section>
+        <section className="mt-6 rounded-[2rem] bg-white p-5 text-[#1f2a24] shadow-xl sm:p-8">
+          <h2 className="mb-5 text-center text-2xl font-black text-[#128ced]">FAQ</h2>
+          {faqs.map(([q,a]) => <details key={q} className="border-b border-black/10 py-4 last:border-0"><summary className="cursor-pointer font-bold">{q}</summary><p className="mt-3 text-sm leading-6 text-gray-600">{a}</p></details>)}
+        </section>
+        <section className="mt-6 rounded-[2rem] border border-white/20 bg-white/15 p-5 sm:p-8">
+          <h2 className="mb-5 text-center text-2xl font-black">How It Works</h2>
+          <div className="grid gap-5">
+            {[["Choose your service", "Pick the care that fits your pets."], ["Submit a request", "Enter your pet details, dates and preferred times."], ["Confirm your booking", "We review your request and contact you. Payment is due before service."], ["Enjoy your time away", "Leave the food and medications your pets need ready for their visits."]].map(([title,detail],i) => <div key={title} className="flex items-start gap-4"><span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-white/20 font-black">{i+1}</span><div><h3 className="font-bold">{title}</h3><p className="mt-1 text-sm leading-6">{detail}</p></div></div>)}
+          </div>
+        </section>
+        <section className="mt-6 rounded-[2rem] bg-white p-5 text-center text-[#1f2a24] shadow-xl sm:p-8">
+          <h2 className="mb-5 text-2xl font-black text-[#128ced]">Reviews and Testimonials</h2>
+          {reviews.length ? reviews.map((review,i) => <figure key={i} className="mb-3 rounded-xl bg-[#f5f9ff] p-4"><blockquote>{review.quote}</blockquote><figcaption className="mt-2 font-bold">{review.name}</figcaption></figure>) : <p className="text-sm text-gray-600">Customer testimonials coming soon.</p>}
+        </section>
+        <section className="mt-6 rounded-[2rem] border border-white/20 bg-white/15 p-5 text-center sm:p-8">
+          <h2 className="mb-4 text-2xl font-black">Contact Info</h2>
+          <p className="font-bold">Thank Dog It&apos;s Friday</p><p className="mt-2 text-sm">Southern Oregon • Rogue Valley</p>
+          {contact.email && <a className="mt-3 block underline" href={`mailto:${contact.email}`}>{contact.email}</a>}
+          {contact.phone && <a className="mt-3 block underline" href={`tel:${contact.phone}`}>{contact.phone}</a>}
+          <Link href="#services" className="mt-5 inline-block rounded-xl bg-white px-5 py-3 font-bold text-[#128ced]">Request a Service</Link>
+        </section>
         {/* Footer */}
         <footer className="mt-6 border-t border-white/25 pt-8 text-center text-sm text-white/80">
           © 2026 Thank Dog It&apos;s Friday
