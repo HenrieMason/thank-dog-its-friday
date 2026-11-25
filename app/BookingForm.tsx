@@ -467,11 +467,6 @@ export default function BookingForm({ service }: { service: Service }) {
     <main className="min-h-screen overflow-x-hidden bg-[#128ced] text-white">
       <div className="mx-auto max-w-2xl px-5 pb-12 pt-6 sm:px-6 sm:pb-16">
         <a href="/#services" className="inline-block rounded-xl bg-white/15 px-4 py-3 font-bold">← Back to Services</a>
-        <section className="mt-6 rounded-[2rem] bg-white/15 p-5 text-center">
-          <h2 className="text-2xl font-black">{SERVICES.find(item => item.id === service)?.title}</h2>
-          <p className="mt-2 text-xl font-bold">{SERVICES.find(item => item.id === service)?.price}</p>
-          <p className="mt-2 text-sm">{SERVICES.find(item => item.id === service)?.detail}</p>
-        </section>
         {/* Booking Form */}
         <form
           method="post"
