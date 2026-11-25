@@ -24,10 +24,8 @@ const SERVICES = [
   },
 ];
 
-// Add actual photo paths, approved reviews and business contact details here.
+// Add actual photo paths here.
 const gallery: { src: string; alt: string }[] = [];
-const reviews: { quote: string; name: string }[] = [];
-const contact = { email: "", phone: "" };
 const faqs = [
   ["What areas do you serve?", "Grants Pass, Central Point, Medford, White City and Eagle Point."],
   ["What animals do you care for?", "Dogs, cats, horses, goats and fish."],
@@ -121,26 +119,15 @@ export default function Home() {
           </div>
           {!gallery.length && <p className="mt-4 text-sm">Pet photos coming soon!</p>}
         </section>
-        <section className="mt-6 rounded-[2rem] bg-white p-5 text-[#1f2a24] shadow-xl sm:p-8">
-          <h2 className="mb-5 text-center text-2xl font-black text-[#128ced]">FAQ</h2>
-          {faqs.map(([q,a]) => <details key={q} className="border-b border-black/10 py-4 last:border-0"><summary className="cursor-pointer font-bold">{q}</summary><p className="mt-3 text-sm leading-6 text-gray-600">{a}</p></details>)}
-        </section>
         <section className="mt-6 rounded-[2rem] border border-white/20 bg-white/15 p-5 sm:p-8">
           <h2 className="mb-5 text-center text-2xl font-black">How It Works</h2>
           <div className="grid gap-5">
             {[["Choose your service", "Pick the care that fits your pets."], ["Submit a request", "Enter your pet details, dates and preferred times."], ["Confirm your booking", "We review your request and contact you. Payment is due before service."], ["Enjoy your time away", "Leave the food and medications your pets need ready for their visits."]].map(([title,detail],i) => <div key={title} className="flex items-start gap-4"><span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-white/20 font-black">{i+1}</span><div><h3 className="font-bold">{title}</h3><p className="mt-1 text-sm leading-6">{detail}</p></div></div>)}
           </div>
         </section>
-        <section className="mt-6 rounded-[2rem] bg-white p-5 text-center text-[#1f2a24] shadow-xl sm:p-8">
-          <h2 className="mb-5 text-2xl font-black text-[#128ced]">Reviews and Testimonials</h2>
-          {reviews.length ? reviews.map((review,i) => <figure key={i} className="mb-3 rounded-xl bg-[#f5f9ff] p-4"><blockquote>{review.quote}</blockquote><figcaption className="mt-2 font-bold">{review.name}</figcaption></figure>) : <p className="text-sm text-gray-600">Customer testimonials coming soon.</p>}
-        </section>
-        <section className="mt-6 rounded-[2rem] border border-white/20 bg-white/15 p-5 text-center sm:p-8">
-          <h2 className="mb-4 text-2xl font-black">Contact Info</h2>
-          <p className="font-bold">Thank Dog It&apos;s Friday</p><p className="mt-2 text-sm">Southern Oregon • Rogue Valley</p>
-          {contact.email && <a className="mt-3 block underline" href={`mailto:${contact.email}`}>{contact.email}</a>}
-          {contact.phone && <a className="mt-3 block underline" href={`tel:${contact.phone}`}>{contact.phone}</a>}
-          <Link href="#services" className="mt-5 inline-block rounded-xl bg-white px-5 py-3 font-bold text-[#128ced]">Request a Service</Link>
+        <section className="mt-6 rounded-[2rem] border border-white/20 bg-white/15 p-5 sm:p-8">
+          <h2 className="mb-5 text-center text-2xl font-black">FAQ</h2>
+          {faqs.map(([q,a]) => <details key={q} className="border-b border-white/20 py-4 last:border-0"><summary className="cursor-pointer font-bold">{q}</summary><p className="mt-3 text-sm leading-6 text-white/95">{a}</p></details>)}
         </section>
         {/* Footer */}
         <footer className="mt-6 border-t border-white/25 pt-8 text-center text-sm text-white/80">

@@ -465,22 +465,6 @@ export default function BookingForm({ service }: { service: Service }) {
 
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#128ced] text-white">
-      {/* Logo */}
-      <div className="w-full px-20 pt-6 sm:px-40 sm:pt-8">
-        <img
-          src="/thankdogitsfriday.webp"
-          alt="Thank Dog It's Friday"
-          className="mx-auto block h-auto w-full max-w-md object-contain"
-        />
-      </div>
-
-      {/* Subtitle */}
-      <div className="px-5 text-center">
-        <h1 className="text-base font-semibold text-white sm:text-lg">
-          Southern Oregon Pet Sitter
-        </h1>
-      </div>
-
       <div className="mx-auto max-w-2xl px-5 pb-12 pt-6 sm:px-6 sm:pb-16">
         <a href="/#services" className="inline-block rounded-xl bg-white/15 px-4 py-3 font-bold">← Back to Services</a>
         <section className="mt-6 rounded-[2rem] bg-white/15 p-5 text-center">
