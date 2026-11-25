@@ -24,8 +24,15 @@ const SERVICES = [
   },
 ];
 
-// Add actual photo paths here.
-const gallery: { src: string; alt: string }[] = [];
+const gallery: { src: string; alt: string }[] = [
+  { src: "/doggos/dog1.webp", alt: "Dog 1" },
+  { src: "/doggos/dog2.webp", alt: "Dog 2" },
+  { src: "/doggos/dog3.webp", alt: "Dog 3" },
+  { src: "/doggos/dog4.webp", alt: "Dog 4" },
+  { src: "/doggos/dog5.webp", alt: "Dog 5" },
+  { src: "/doggos/dog6.webp", alt: "Dog 6" },
+];
+
 const faqs = [
   ["What areas do you serve?", "Grants Pass, Central Point, Medford, White City and Eagle Point."],
   ["What animals do you care for?", "Dogs, cats, horses, goats and fish."],
@@ -33,6 +40,7 @@ const faqs = [
   ["When is payment due?", "After your request is reviewed, the full amount is due before your scheduled service."],
   ["What should I provide?", "Please provide all food and medications for your pets."],
 ];
+
 export default function Home() {
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#128ced] text-white">
@@ -53,7 +61,8 @@ export default function Home() {
       </div>
 
       <div className="mx-auto max-w-2xl px-5 pb-12 pt-6 sm:px-6 sm:pb-16">
-        {/* Cities and Animals - Blue Bubble */}
+
+        {/* Cities and Animals */}
         <section className="w-full rounded-[2rem] border border-white/20 bg-white/15 px-4 py-3 text-center text-white shadow-sm sm:px-10">
           <p className="text-sm font-bold leading-6 sm:text-base">
             Dogs • Cats • Horses • Goats • Fish
@@ -98,41 +107,153 @@ export default function Home() {
           </p>
         </section>
 
+        {/* Services and Pricing */}
+        <section
+          id="services"
+          className="mt-6 rounded-[2rem] border border-white/20 bg-white/15 p-5 text-white shadow-sm sm:p-8"
+        >
+          <h2 className="mb-5 text-center text-2xl font-black">
+            Services and Pricing
+          </h2>
 
-        <section id="services" className="mt-6 rounded-[2rem] bg-white p-5 text-[#1f2a24] shadow-xl sm:p-8">
-          <h2 className="mb-5 text-center text-2xl font-black text-[#128ced]">Services and Pricing</h2>
           <div className="grid gap-3">
             {SERVICES.map(item => (
-              <Link key={item.id} href={item.href} className="block rounded-2xl border-2 border-[#128ced]/20 bg-[#f5f9ff] p-5 transition hover:border-[#128ced]">
-                <div className="flex flex-wrap justify-between gap-2 text-xl font-black text-[#128ced]"><span>{item.title}</span><span>{item.price}</span></div>
-                <p className="mt-2 text-sm">{item.description}</p>
-                <p className="mt-1 text-xs font-semibold">{item.detail}</p>
-                <p className="mt-4 font-bold text-[#128ced]">Request Booking →</p>
+              <Link
+                key={item.id}
+                href={item.href}
+                className="block rounded-2xl border-2 border-white/20 bg-white/15 p-5 transition hover:border-white/60 hover:bg-white/25"
+              >
+                <div className="flex flex-wrap justify-between gap-2 text-xl font-black">
+                  <span>{item.title}</span>
+                  <span>{item.price}</span>
+                </div>
+
+                <p className="mt-2 text-sm">
+                  {item.description}
+                </p>
+
+                <p className="mt-1 text-xs font-semibold">
+                  {item.detail}
+                </p>
+
+                <p className="mt-4 font-bold">
+                  Request Booking →
+                </p>
               </Link>
             ))}
           </div>
         </section>
+
+        {/* Pet Gallery */}
         <section className="mt-6 rounded-[2rem] border border-white/20 bg-white/15 p-5 text-center sm:p-8">
-          <h2 className="mb-5 text-2xl font-black">Doggo Gallery</h2>
+          <h2 className="mb-5 text-2xl font-black">
+            Pet Gallery
+          </h2>
+
           <div className="grid grid-cols-3 gap-3">
-            {gallery.length ? gallery.map(photo => <img key={photo.src} src={photo.src} alt={photo.alt} className="aspect-square w-full rounded-xl object-cover" />) : Array.from({length: 6}, (_, i) => <div key={i} aria-hidden="true" className="grid aspect-square place-items-center rounded-xl bg-white/20 text-3xl">🐾</div>)}
+            {gallery.length ? (
+              gallery.map(photo => (
+                <img
+                  key={photo.src}
+                  src={photo.src}
+                  alt={photo.alt}
+                  className="aspect-square w-full rounded-xl object-cover"
+                />
+              ))
+            ) : (
+              Array.from({ length: 6 }, (_, i) => (
+                <div
+                  key={i}
+                  aria-hidden="true"
+                  className="grid aspect-square place-items-center rounded-xl bg-white/20 text-3xl"
+                >
+                  🐾
+                </div>
+              ))
+            )}
           </div>
-          {!gallery.length && <p className="mt-4 text-sm">Pet photos coming soon!</p>}
+
+          {!gallery.length && (
+            <p className="mt-4 text-sm">
+              Pet photos coming soon!
+            </p>
+          )}
         </section>
+
+        {/* How It Works */}
         <section className="mt-6 rounded-[2rem] border border-white/20 bg-white/15 p-5 sm:p-8">
-          <h2 className="mb-5 text-center text-2xl font-black">How It Works</h2>
+          <h2 className="mb-5 text-center text-2xl font-black">
+            How It Works
+          </h2>
+
           <div className="grid gap-5">
-            {[["Choose your service", "Pick the care that fits your pets."], ["Submit a request", "Enter your pet details, dates and preferred times."], ["Confirm your booking", "We review your request and contact you. Payment is due before service."], ["Enjoy your time away", "Leave the food and medications your pets need ready for their visits."]].map(([title,detail],i) => <div key={title} className="flex items-start gap-4"><span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-white/20 font-black">{i+1}</span><div><h3 className="font-bold">{title}</h3><p className="mt-1 text-sm leading-6">{detail}</p></div></div>)}
+            {[
+              [
+                "Choose your service",
+                "Pick the care that fits your pets."
+              ],
+              [
+                "Submit a request",
+                "Enter your pet details, dates and preferred times."
+              ],
+              [
+                "Confirm your booking",
+                "We review your request and contact you. Payment is due before service."
+              ],
+              [
+                "Enjoy your time away",
+                "Leave the food and medications your pets need ready for their visits."
+              ],
+            ].map(([title, detail], i) => (
+              <div
+                key={title}
+                className="flex items-start gap-4"
+              >
+                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-white/20 font-black">
+                  {i + 1}
+                </span>
+
+                <div>
+                  <h3 className="font-bold">
+                    {title}
+                  </h3>
+
+                  <p className="mt-1 text-sm leading-6">
+                    {detail}
+                  </p>
+                </div>
+              </div>
+            ))}
           </div>
         </section>
+
+        {/* FAQ */}
         <section className="mt-6 rounded-[2rem] border border-white/20 bg-white/15 p-5 sm:p-8">
-          <h2 className="mb-5 text-center text-2xl font-black">FAQ</h2>
-          {faqs.map(([q,a]) => <details key={q} className="border-b border-white/20 py-4 last:border-0"><summary className="cursor-pointer font-bold">{q}</summary><p className="mt-3 text-sm leading-6 text-white/95">{a}</p></details>)}
+          <h2 className="mb-5 text-center text-2xl font-black">
+            FAQ
+          </h2>
+
+          {faqs.map(([q, a]) => (
+            <details
+              key={q}
+              className="border-b border-white/20 py-4 last:border-0"
+            >
+              <summary className="cursor-pointer font-bold">
+                {q}
+              </summary>
+
+              <p className="mt-3 text-sm leading-6 text-white/95">
+                {a}
+              </p>
+            </details>
+          ))}
         </section>
+
         {/* Footer */}
         <footer className="mt-6 border-t border-white/25 pt-8 text-center text-sm text-white/80">
           © 2026 Thank Dog It&apos;s Friday
         </footer>
+
       </div>
     </main>
   );
